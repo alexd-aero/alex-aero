@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — alexaero.dev</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Sora', sans-serif;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    body::before {
+      width: 600px; height: 600px;
+      background: #ffffff;
+      top: -150px; left: -150px;
+    }
+    body::after {
+      width: 500px; height: 500px;
+      background: #ffffff;
+      bottom: -120px; right: -120px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+      padding: 3.5rem 4rem;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3rem;
+      font-weight: 300;
+      color: #f0f0f0;
+      letter-spacing: 0.04em;
+    }
+    p {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    a {
+      display: inline-block;
+      margin-top: 1.8rem;
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    a:hover { color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.3); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>404</h1>
+    <p>path not found</p>
+    <a href="/">← back home</a>
+  </div>
+</body>
+</html>

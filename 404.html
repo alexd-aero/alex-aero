@@ -1,84 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>404 — alexaero.dev</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — ax.</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
   <style>
+    :root { --bg: #07070a; --ink: #ece7de; --mute: rgba(236,231,222,.6); --faint: rgba(236,231,222,.35); --gold: #d6b45c; --bw: #ff5a3d; color-scheme: dark; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Sora', sans-serif;
-      background: #0a0a0a;
-      overflow: hidden;
-    }
-    body::before, body::after {
-      content: '';
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.12;
-      pointer-events: none;
-    }
-    body::before {
-      width: 600px; height: 600px;
-      background: #ffffff;
-      top: -150px; left: -150px;
-    }
-    body::after {
-      width: 500px; height: 500px;
-      background: #ffffff;
-      bottom: -120px; right: -120px;
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
-      padding: 3.5rem 4rem;
-      text-align: center;
-    }
-    h1 {
-      font-size: 3rem;
-      font-weight: 300;
-      color: #f0f0f0;
-      letter-spacing: 0.04em;
-    }
-    p {
-      margin-top: 1rem;
-      font-size: 0.85rem;
-      font-weight: 300;
-      color: rgba(255,255,255,0.25);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-    a {
-      display: inline-block;
-      margin-top: 1.8rem;
-      font-size: 0.75rem;
-      font-weight: 300;
-      color: rgba(255,255,255,0.2);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 2px;
-      transition: color 0.2s, border-color 0.2s;
-    }
-    a:hover { color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.3); }
+    body { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; background: var(--bg); color: var(--ink); font-family: "Geist", system-ui, sans-serif; overflow: hidden; padding: 24px; }
+    canvas { position: fixed; inset: 0; width: 100%; height: 100%; }
+    .box { position: relative; text-align: center; max-width: 520px; }
+    .code { font: 300 clamp(96px, 22vw, 180px)/.9 "Geist", sans-serif; letter-spacing: -.06em; }
+    .code em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; color: var(--gold); }
+    p { margin-top: 18px; color: var(--mute); font-size: 17px; font-weight: 300; }
+    .tag { display: inline-block; margin-top: 22px; font: 12px "Geist Mono", monospace; color: var(--faint); padding: 6px 10px; border: 1px solid rgba(255,255,255,.1); border-radius: 99px; }
+    .tag b { color: var(--bw); font-weight: 400; }
+    a.home { display: inline-flex; gap: 8px; margin-top: 30px; color: var(--ink); text-decoration: none; padding: 13px 22px; border-radius: 99px; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.04); transition: background .2s, border-color .2s; }
+    a.home:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.3); }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>404</h1>
-    <p>path not found</p>
-    <a href="/">← back home</a>
-  </div>
+  <canvas id="c" aria-hidden="true"></canvas>
+  <main class="box">
+    <div class="code">4<em>0</em>4</div>
+    <p>This thread came loose. Nothing is woven here.</p>
+    <span class="tag" id="tag">GET <b id="path">/</b> → not found</span><br>
+    <a class="home" href="/">← Back to the loom</a>
+  </main>
+  <script>
+    document.getElementById("path").textContent = location.pathname.slice(0, 60);
+    const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+    let W, H, T = [];
+    function size() {
+      const d = Math.min(devicePixelRatio || 1, 2);
+      W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+      T = Array.from({ length: Math.round(H / 30) }, (_, i) => ({ y: H * (i + .5) / Math.round(H / 30), a: 6 + Math.random() * 16, f: .002 + Math.random() * .003, p: Math.random() * 6, s: Math.random() < .5 ? -1 : 1 }));
+    }
+    function draw(t) {
+      ctx.clearRect(0, 0, W, H);
+      const cut = W / 2;
+      T.forEach((th, i) => {
+        ctx.beginPath();
+        for (let x = 0; x <= W; x += 14) {
+          // the middle thread is broken
+          const gap = i === (T.length >> 1) && Math.abs(x - cut) < 90;
+          const y = th.y + th.a * Math.sin(x * th.f + t * .0005 * th.s + th.p) + (gap ? (x < cut ? 1 : -1) * Math.pow(1 - Math.abs(x - cut) / 90, 2) * 30 : 0);
+          x === 0 || (gap && Math.abs(x - cut) < 14) ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = i === (T.length >> 1) ? "rgba(214,180,92,.5)" : "rgba(236,231,222,.06)";
+        ctx.stroke();
+      });
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) requestAnimationFrame(draw);
+    }
+    size(); addEventListener("resize", size); requestAnimationFrame(draw);
+  </script>
 </body>
 </html>

@@ -3,340 +3,210 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ax. — Alex builds for the machines you own</title>
-  <meta name="description" content="Alex (alexd-aero): Aegis × Burrow, Bulwark, Selkies Forge, Weft and more. Self-hosted infrastructure that feels like a product.">
-  <meta name="theme-color" content="#07070a">
-  <meta property="og:title" content="ax. — Alex builds for the machines you own">
-  <meta property="og:description" content="A post-quantum gate on a tunnel engine, a request shield that decides in microseconds, Linux desktops in a browser tab.">
+  <title>Alex · Aegis × Burrow, Bulwark and the rest</title>
+  <meta name="description" content="Alex (alexd-aero) builds self-hosted infrastructure: Aegis × Burrow, Bulwark, Selkies Forge, Weft and more.">
+  <meta name="theme-color" content="#030304">
+  <meta property="og:title" content="Alex · Aegis × Burrow, Bulwark and the rest">
+  <meta property="og:description" content="A post-quantum gate on a tunnel engine, a shield that judges every request in microseconds, and the rest of a self-hosted stack.">
   <meta property="og:url" content="https://alex-aero.com/">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/brand/aegis-burrow.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/site.css?v=3.0.0">
-  <script type="module" src="assets/site.js?v=3.0.0"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=4.0.0">
+  <script type="module" src="assets/site.js?v=4.0.0"></script>
 </head>
 <body>
-  <div class="spot" aria-hidden="true"></div>
-
   <header class="nav" id="nav">
-    <a class="logo" href="#top" aria-label="ax., back to the top"><em>ax</em>.</a>
-    <nav class="nav-links" aria-label="Sections">
+    <a class="me" href="#top"><b>ax.</b><span>alexd-aero</span></a>
+    <nav aria-label="Sections">
+      <a href="#film">Film</a>
+      <a href="#burrow">Burrow</a>
       <a href="#bulwark">Bulwark</a>
-      <a href="#aegis">Aegis × Burrow</a>
-      <a href="#weft">Woven</a>
       <a href="#work">Work</a>
       <a href="#log">Log</a>
     </nav>
-    <a class="nav-live" href="#log" title="The newest push to any of my repositories">
-      <span class="pulse" aria-hidden="true"></span><span id="nav-live">shipping</span>
-    </a>
+    <a class="live" href="#log" title="The newest push to any of my repositories"><i></i><span id="nav-live">shipping</span></a>
   </header>
 
   <main id="top">
-    <!-- ───────────── HERO ───────────── -->
-    <section class="hero">
-      <canvas id="loom" aria-hidden="true"></canvas>
-      <div class="hero-fade" aria-hidden="true"></div>
-      <div class="wrap hero-in">
-        <p class="eyebrow rise" style="--d:.05s"><span class="dot"></span> alexd-aero · self-hosted, everything</p>
-        <h1 class="hero-title rise" style="--d:.15s">
-          Software for the<br>machines <em>you</em> own.
-        </h1>
-        <p class="hero-typed rise" style="--d:.3s" aria-live="off">
-          <span class="prompt">~$</span> building <span id="typer" class="typer">tunnels</span><span class="caret" aria-hidden="true"></span>
-        </p>
-        <p class="hero-sub rise" style="--d:.42s">
-          I'm Alex. I make self-hosted infrastructure that feels like a product: a post-quantum
-          gate on a tunnel engine, a request shield that decides in microseconds, Linux desktops
-          in a browser tab. Most of it runs on a Raspberry Pi on my desk.
-        </p>
-        <div class="hero-cta rise" style="--d:.55s">
-          <a class="btn btn-hot mag" href="#bulwark"><span>Try to hack Bulwark</span> <i>→</i></a>
-          <a class="btn mag" href="#work"><span>See the work</span> <i>↓</i></a>
+    <!-- intro + film -->
+    <section class="intro wrap">
+      <div class="family" aria-label="The projects">
+        <img src="assets/brand/aegis-burrow.svg" alt="Aegis × Burrow" title="Aegis × Burrow">
+        <img src="assets/brand/burrow.svg" alt="Burrow" title="Burrow">
+        <img src="assets/brand/bulwark.svg" alt="Bulwark" title="Bulwark">
+        <img src="assets/brand/burrow-pages.svg" alt="Burrow Pages" title="Burrow Pages">
+        <img src="assets/brand/forge.svg" alt="Selkies Forge" title="Selkies Forge">
+        <img src="assets/brand/selfmail.svg" alt="selfmail" title="selfmail">
+        <img src="assets/brand/weft.svg" alt="Weft" title="Weft">
+      </div>
+      <h1>I build the gate, the tunnels and the shield for the machines you own.</h1>
+      <p class="lede">I'm Alex. Aegis × Burrow puts one post-quantum login in front of everything you
+        self-host and gives any port its own HTTPS address. Bulwark judges every request before it
+        lands. Most of it runs on a Raspberry Pi on my desk. Here are seventy seconds of it working.</p>
+    </section>
+
+    <section class="film-sec wrap" id="film" aria-label="The Aegis × Burrow film">
+      <div class="player" id="player" tabindex="0"></div>
+      <p class="caption" id="caption" aria-live="polite"></p>
+      <ol class="chapters" id="chapters"></ol>
+    </section>
+
+    <!-- aegis × burrow -->
+    <section class="sec wrap" id="aegis">
+      <img class="banner" src="assets/brand/aegis-burrow-banner.svg" alt="Aegis × Burrow: a post-quantum gate, on a tunnel engine. Aegis is the gate and the UI; Burrow is the engine.">
+      <div class="split">
+        <div>
+          <h2>Two halves, one process.</h2>
+          <p><b>Aegis</b> is the gate and the dashboard: one sign-in in front of Termix, Selkies Forge,
+            your tunnels and your own links. <b>Burrow</b> is the engine underneath: the tunnels, the
+            Cloudflare link, the addons. Burrow has no login of its own; Aegis decides who gets in.</p>
+          <p class="meta"><span class="ver" data-ver="aegis-burrow">2.39.0</span> MIT · Node 18+, zero runtime dependencies · updates itself, with versions to roll back to</p>
         </div>
-        <dl class="hero-stats rise" style="--d:.7s">
-          <div><dt><span class="count" data-to="153">153</span></dt><dd>Linux desktops in Selkies Forge</dd></div>
-          <div><dt>~<span class="count" data-to="3">3</span><small>µs</small></dt><dd>per Bulwark decision</dd></div>
-          <div><dt><small>v</small><span id="stat-aegis">2.39</span></dt><dd>Aegis × Burrow, and counting</dd></div>
-          <div><dt><span class="count" data-to="0">0</span></dt><dd>runtime dependencies, on purpose</dd></div>
+        <dl class="facts">
+          <div><dt>The login</dt><dd>Sealed twice in the browser, with keys from an X-Wing exchange (ML-KEM-768 + X25519). Passwords kept as scrypt, sessions bound to their host.</dd></div>
+          <div><dt>Machines</dt><dd>Link another box with one command. Behind NAT, an agent carries SSH over one outgoing socket. Move the whole gate to another machine in one click.</dd></div>
+          <div><dt>Addons</dt><dd>Bulwark, Burrow Pages, selfmail and Selkies Forge install from the dashboard, in the <a href="https://github.com/alexd-aero/weft">Weft</a> format.</dd></div>
         </dl>
       </div>
-      <a class="scroll-cue" href="#ticker" aria-label="Scroll down"><span></span></a>
+      <div class="cmd"><span>$</span><code id="install-cmd">curl -fsSL https://raw.githubusercontent.com/alexd-aero/aegis-burrow/main/install.sh | bash</code><button class="copy" data-copy="install-cmd" type="button">Copy</button></div>
+      <a class="repo" href="https://github.com/alexd-aero/aegis-burrow" target="_blank" rel="noopener">github.com/alexd-aero/aegis-burrow ↗</a>
     </section>
 
-    <!-- ───────────── TICKER ───────────── -->
-    <div class="ticker" id="ticker" aria-label="Recent commits">
-      <div class="ticker-track" id="ticker-track"></div>
-    </div>
-
-    <!-- ───────────── BULWARK ───────────── -->
-    <section class="sec bulwark" id="bulwark">
+    <!-- burrow -->
+    <section class="sec burrow" id="burrow">
       <div class="wrap">
-        <div class="sec-head reveal">
-          <span class="sec-num">01</span>
-          <span class="sec-kicker">The one I'm proudest of</span>
+        <div class="burrow-head">
+          <img src="assets/brand/burrow.svg" alt="">
+          <div>
+            <p class="kicker">The engine</p>
+            <h2>Burrow</h2>
+            <p class="lede">Any port on your machine, at its own HTTPS address. No ports opened on your router.</p>
+          </div>
         </div>
-        <div class="bw-grid">
-          <div class="bw-copy reveal">
-            <div class="brand-row">
-              <svg class="bw-logo" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="bwg" x1="10" y1="6" x2="54" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#ff7a45"/><stop offset="1" stop-color="#e5384f"/></linearGradient></defs><path d="M32 4 56 13v17c0 15-10 25-24 30C18 55 8 45 8 30V13z" fill="url(#bwg)"/><path d="M32 14 46 19.5v11c0 9-6 15.5-14 18.5-8-3-14-9.5-14-18.5v-11z" fill="#120708" opacity=".55"/><path d="m25 32 5 5 10-11" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <div>
-                <h2 class="bw-name">Bulwark</h2>
-                <p class="bw-tag">A shield for self-hosted gateways <span class="ver" data-ver="bulwark">1.9.0</span></p>
-              </div>
-            </div>
-            <p class="lead">Every request, judged <em>before</em> your app ever sees it.</p>
-            <p>
-              Bulwark runs inside the gateway and answers synchronously: banned, blocklisted,
-              a payload, or through. It decodes a URL the way your app will
-              (<code>%252e%252e%252f</code>, <code>%c0%af</code>, fullwidth <code>．．／</code>),
-              names what it found with its MITRE ATT&amp;CK, OWASP and CVE references, watches how
-              each address behaves, and sees attack waves coming before they peak.
-            </p>
-            <p class="dim">
-              The console on the right isn't a mock-up. It's Bulwark's actual detection engine,
-              loaded into this page and running in your browser. Throw something at it.
-            </p>
-            <ul class="bw-stats">
-              <li><b>~3 µs</b><span>a request it has seen the shape of</span></li>
-              <li><b>21</b><span>attack categories</span></li>
-              <li><b>44</b><span>known CVE exploits, tagged</span></li>
-              <li><b>250k+</b><span>blocklisted addresses</span></li>
-            </ul>
-            <a class="link-arrow" href="https://github.com/alexd-aero/bulwark" target="_blank" rel="noopener">github.com/alexd-aero/bulwark <i>↗</i></a>
+
+        <div class="burrow-grid">
+          <div class="tunnel-art" aria-hidden="true">
+            <svg viewBox="0 0 400 300" id="tunnel-svg">
+              <defs>
+                <radialGradient id="bu-light"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".4" stop-color="#3ddc97" stop-opacity=".22"/><stop offset="1" stop-color="#3ddc97" stop-opacity="0"/></radialGradient>
+              </defs>
+              <path d="M20 270h360" stroke="#fff" stroke-opacity=".12" stroke-width="2"/>
+              <path class="arch a1" d="M70 270V150a130 130 0 0 1 260 0v120"/>
+              <path class="arch a2" d="M120 270V158a80 80 0 0 1 160 0v112"/>
+              <path class="arch a3" d="M160 270V166a40 40 0 0 1 80 0v104"/>
+              <circle cx="200" cy="215" r="70" fill="url(#bu-light)" class="glow"/>
+              <circle cx="200" cy="215" r="9" fill="#fff"/>
+              <g id="tunnel-pk"></g>
+            </svg>
+            <div class="out-label"><span id="out-port">127.0.0.1:3000</span><i>⟶</i><span id="out-url">grafana.example.com</span></div>
           </div>
 
-          <div class="console reveal" id="console">
-            <div class="console-bar">
-              <span class="lights"><i></i><i></i><i></i></span>
-              <span class="console-title">bulwark · guard</span>
-              <span class="console-engine" id="bw-engine">loading engine…</span>
+          <form class="builder" id="builder" autocomplete="off" onsubmit="return false">
+            <p class="b-title">Try it: publish a port</p>
+            <label for="b-port">Port on this machine</label>
+            <input id="b-port" inputmode="numeric" value="3000" maxlength="5">
+            <label for="b-name">Address</label>
+            <div class="addr"><input id="b-name" value="grafana" maxlength="30" spellcheck="false"><span id="b-zone">.example.com</span></div>
+            <label>Domain</label>
+            <div class="seg" id="b-mode">
+              <button type="button" data-m="own" class="on">your domain</button>
+              <button type="button" data-m="wild">wildcard</button>
+              <button type="button" data-m="quick">no domain</button>
             </div>
+            <label>Who can open it</label>
+            <div class="seg" id="b-who">
+              <button type="button" data-w="login" class="on">Aegis login</button>
+              <button type="button" data-w="pass">its own password</button>
+              <button type="button" data-w="anyone">anyone</button>
+            </div>
+            <div class="b-out">
+              <code id="b-url">https://grafana.example.com</code>
+              <span id="b-note"></span>
+            </div>
+          </form>
+        </div>
 
-            <ol class="pipeline" id="pipeline" aria-label="The four steps">
-              <li data-step="0"><b>1</b> normalize</li>
-              <li data-step="1"><b>2</b> match</li>
-              <li data-step="2"><b>3</b> lexers</li>
-              <li data-step="3"><b>4</b> score</li>
-            </ol>
+        <ul class="burrow-list">
+          <li><b>Your domain, or none.</b> One Cloudflare authorization links your own domain. Without one, every tunnel gets a free <code>trycloudflare.com</code> address.</li>
+          <li><b>One wildcard record.</b> Every tunnel at <code>NAME.tunnel.example.com</code>, with your own certificate held on a small VPS relay where Cloudflare's free one stops a level short.</li>
+          <li><b>Ports on an address.</b> Another whole site on <code>docs.example.com:8080</code>. New in 2.39.</li>
+          <li><b>Clone a link.</b> Paste someone's Aegis × Burrow tunnel and put it on an address of yours. Their gate still decides who may open it.</li>
+          <li><b>A control socket.</b> Apps on the same machine publish their own tunnels. Selkies Forge does, for every desktop it starts.</li>
+          <li><b>Extensions.</b> Addons can run inside Burrow and add a page to it. <a href="https://github.com/alexd-aero/burrow-pages">Burrow Pages</a> is built that way.</li>
+        </ul>
+      </div>
+    </section>
 
+    <!-- bulwark -->
+    <section class="sec wrap" id="bulwark">
+      <img class="banner" src="assets/brand/bulwark-banner.svg" alt="Bulwark: a shield for everything you publish from home. Judged in microseconds, banned everywhere at once.">
+      <div class="split">
+        <div>
+          <h2>The part I'm proudest of.</h2>
+          <p>Bulwark runs inside the gateway and answers before your app does: banned, blocklisted, a
+            payload, or through. It decodes a URL the way your app will, names what it found with its
+            MITRE ATT&amp;CK, OWASP and CVE references, scores every address, and sees waves coming
+            before they peak. It's on by default in Aegis × Burrow.</p>
+          <p class="meta"><span class="ver" data-ver="bulwark" style="--c:#ff6a3d">1.9.0</span> 21 categories · 44 tagged CVEs · 250k+ blocklisted addresses</p>
+        </div>
+        <div class="bw-how">
+          <p class="kicker">This console runs the real engine</p>
+          <p>Bulwark's detection code, copied unchanged from its repository, runs in this page.
+            Send it anything. Two dropped payloads from one address ban it, just like on a real gate.</p>
+        </div>
+      </div>
+
+      <div class="bwc" id="bwc">
+        <div class="bwc-top">
+          <img src="assets/brand/bulwark.svg" alt=""><b>Bulwark</b>
+          <span class="on">Live</span><span>Overview</span><span>Patterns</span><span>Lists</span><span>Inspector</span>
+          <em id="bw-engine">loading the engine…</em>
+        </div>
+        <div class="bwc-grid">
+          <div class="bwc-main">
             <form class="probe" id="probe" autocomplete="off">
-              <select id="probe-method" aria-label="Method">
-                <option>GET</option><option>POST</option><option>PUT</option><option>TRACE</option><option>PROPFIND</option>
-              </select>
+              <select id="probe-method" aria-label="Method"><option>GET</option><option>POST</option><option>PUT</option><option>TRACE</option><option>PROPFIND</option></select>
               <input id="probe-path" spellcheck="false" aria-label="Request path and query" value="/?id=1%27%20OR%20%271%27%3D%271">
-              <button type="submit">Send <i>⏎</i></button>
+              <button type="submit">Send</button>
             </form>
-            <div class="chips" id="chips" aria-label="Try one of these"></div>
-
+            <div class="chips" id="chips"></div>
             <div class="verdict" id="verdict" aria-live="polite">
-              <div class="v-top">
-                <span class="v-badge" id="v-badge">—</span>
-                <span class="v-name" id="v-name">Pick an attack, or type your own.</span>
-              </div>
-              <div class="meter" aria-hidden="true">
-                <div class="meter-fill" id="v-meter"></div>
-                <span class="meter-mark" title="5 points: a payload"></span>
-              </div>
+              <div class="v-top"><span class="v-badge" id="v-badge">…</span><span class="v-name" id="v-name"></span></div>
+              <div class="steps" id="steps"><span>normalize</span><span>match</span><span>lexers</span><span>score</span></div>
               <dl class="v-facts" id="v-facts"></dl>
             </div>
-
-            <div class="feed-head">
-              <span><span class="pulse red"></span> live feed</span>
-              <span class="feed-note">sample traffic, the real engine</span>
-              <span class="feed-count"><b id="fc-drop">0</b> dropped · <b id="fc-pass">0</b> through</span>
-            </div>
-            <ol class="feed" id="feed" aria-label="Sample requests and their verdicts"></ol>
           </div>
+          <aside class="bwc-side">
+            <div class="kpis"><div><b id="k-req">0</b><span>requests</span></div><div><b id="k-drop">0</b><span>dropped</span></div><div><b id="k-ban">0</b><span>banned</span></div></div>
+            <p class="side-k">what they're after</p>
+            <div class="cats" id="cats"></div>
+          </aside>
         </div>
+        <div class="feed-head"><span><i></i>Live</span><span class="dim">sample traffic from documentation addresses, judged here as it arrives</span></div>
+        <div class="feed" id="feed"></div>
       </div>
+      <a class="repo" href="https://github.com/alexd-aero/bulwark" target="_blank" rel="noopener">github.com/alexd-aero/bulwark ↗</a>
     </section>
 
-    <!-- ───────────── AEGIS × BURROW ───────────── -->
-    <section class="sec aegis" id="aegis">
-      <div class="wrap">
-        <div class="sec-head reveal">
-          <span class="sec-num">02</span>
-          <span class="sec-kicker">The flagship</span>
-        </div>
-        <div class="ab-head reveal">
-          <h2 class="big">Aegis <span class="x">×</span> Burrow</h2>
-          <p class="lead">One sign-in that nobody, <em>not even Cloudflare</em>, can read, in front of everything
-            you run. And any port on your machine gets its own HTTPS address.
-            <span class="ver" data-ver="aegis-burrow">2.39.0</span></p>
-        </div>
-
-        <figure class="flow reveal" aria-label="A browser signs in to Aegis, Bulwark screens requests, Burrow tunnels them to ports on your machine">
-          <svg viewBox="0 0 1100 420" id="flow-svg" role="img">
-            <defs>
-              <linearGradient id="fl-a" x1="0" x2="1"><stop stop-color="#3ddc97" stop-opacity="0"/><stop offset=".5" stop-color="#3ddc97" stop-opacity=".55"/><stop offset="1" stop-color="#3ddc97" stop-opacity=".15"/></linearGradient>
-              <radialGradient id="fl-glow"><stop stop-color="#3ddc97" stop-opacity=".35"/><stop offset="1" stop-color="#3ddc97" stop-opacity="0"/></radialGradient>
-              <radialGradient id="fl-red"><stop stop-color="#ff5a3d" stop-opacity=".9"/><stop offset="1" stop-color="#ff5a3d" stop-opacity="0"/></radialGradient>
-              <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
-            </defs>
-
-            <!-- paths -->
-            <path id="p-in"  d="M150 210 C 260 210, 300 210, 420 210" class="wire"/>
-            <path id="p-bad" d="M150 120 C 260 120, 320 160, 392 192" class="wire wire-bad"/>
-            <path id="p-o1"  d="M640 210 C 760 210, 760 70, 880 70" class="wire"/>
-            <path id="p-o2"  d="M640 210 C 760 210, 760 160, 880 160" class="wire"/>
-            <path id="p-o3"  d="M640 210 C 760 210, 760 250, 880 250" class="wire"/>
-            <path id="p-o4"  d="M640 210 C 760 210, 760 340, 880 340" class="wire"/>
-
-            <!-- you -->
-            <g class="node" transform="translate(40 168)">
-              <rect width="110" height="84" rx="16"/>
-              <path d="M30 26h50v30H30z M24 62h62" class="ico"/>
-              <text x="55" y="106" class="lbl" text-anchor="middle">you, anywhere</text>
-            </g>
-            <g class="node node-bad" transform="translate(40 92)">
-              <rect width="110" height="56" rx="14"/>
-              <text x="55" y="34" class="mono" text-anchor="middle">/.env ?id=1'--</text>
-            </g>
-
-            <!-- gate -->
-            <circle cx="530" cy="210" r="150" fill="url(#fl-glow)"/>
-            <circle cx="530" cy="210" r="118" class="ring ring-bw"/>
-            <text class="ring-lbl" dy="-6"><textPath href="#ring-path" startOffset="4%">BULWARK · judged in µs · BULWARK · judged in µs · BULWARK · judged in µs ·</textPath></text>
-            <path id="ring-path" d="M530 210 m-128 0 a128 128 0 1 1 256 0 a128 128 0 1 1 -256 0" fill="none"/>
-            <g class="node node-gate" transform="translate(420 140)">
-              <rect width="220" height="140" rx="22"/>
-              <text x="110" y="44" class="t1" text-anchor="middle">Aegis</text>
-              <text x="110" y="68" class="mono dim" text-anchor="middle">ML-KEM-768 + X25519</text>
-              <line x1="24" x2="196" y1="86" y2="86" class="sep"/>
-              <text x="110" y="114" class="t2" text-anchor="middle">Burrow tunnels</text>
-            </g>
-
-            <!-- ports -->
-            <g class="port" transform="translate(880 44)"><rect width="190" height="52" rx="12"/><text x="16" y="23" class="t3">grafana.example.com</text><text x="16" y="40" class="mono dim">→ localhost:3000</text></g>
-            <g class="port" transform="translate(880 134)"><rect width="190" height="52" rx="12"/><text x="16" y="23" class="t3">Termix</text><text x="16" y="40" class="mono dim">terminals in a tab</text></g>
-            <g class="port" transform="translate(880 224)"><rect width="190" height="52" rx="12"/><text x="16" y="23" class="t3">Selkies Forge</text><text x="16" y="40" class="mono dim">a Linux desktop</text></g>
-            <g class="port" transform="translate(880 314)"><rect width="190" height="52" rx="12"/><text x="16" y="23" class="t3">Burrow Pages</text><text x="16" y="40" class="mono dim">your repo, live on push</text></g>
-
-            <g id="flow-dots"></g>
-          </svg>
-          <figcaption>Requests arrive sealed, Bulwark drops the bad ones at the ring, Burrow carries the rest to the port that asked for them.</figcaption>
-        </figure>
-
-        <div class="ab-grid">
-          <article class="feat reveal">
-            <h3>A login nobody can read</h3>
-            <p>Your password is sealed twice in the browser with an X-Wing key exchange
-              (ML-KEM-768 + X25519) before it leaves. TLS-terminating proxies see ciphertext.
-              Passwords are kept as scrypt, sessions are bound to their host.</p>
-          </article>
-          <article class="feat reveal">
-            <h3>Any port, its own address</h3>
-            <p><code>grafana.example.com</code>, <code>tunnel-3000-aegis.example.com</code>, or a free
-              <code>trycloudflare.com</code> name. Login-protected, a password of its own, or public.
-              It never touches a DNS record that isn't its own.</p>
-          </article>
-          <article class="feat reveal">
-            <h3>Machines, drawn like a workflow</h3>
-            <p>Link another box with one command. It shows up on a canvas, gate → machines → apps,
-              green while it answers, with its specs, containers and a terminal. Behind NAT? An agent
-              carries SSH over one outgoing socket.</p>
-          </article>
-          <article class="feat reveal">
-            <h3>Move the whole gate</h3>
-            <p>Hand the login, domain, tunnels, addons and certificates to another machine in one
-              click. The old one steps aside only once the new one answers, and
-              <code>aegis resume-here</code> undoes it.</p>
-          </article>
-          <article class="feat reveal">
-            <h3>Addons, powered by Weft</h3>
-            <p>Bulwark, Burrow Pages, selfmail and Selkies Forge install from the dashboard. Addons that
-              need root ask once, keep the password in memory for that job only, or run in your own terminal.</p>
-          </article>
-          <article class="feat reveal">
-            <h3>It updates itself</h3>
-            <p>Releases land every few days, and the gate picks them up on its own, with versions you can roll back to.
-              Node 18+, no dependencies, one systemd user service.</p>
-          </article>
-        </div>
-
-        <div class="install reveal">
-          <div class="install-cmd">
-            <span class="prompt">$</span>
-            <code id="install-cmd">curl -fsSL https://raw.githubusercontent.com/alexd-aero/aegis-burrow/main/install.sh | bash</code>
-            <button class="copy" data-copy="install-cmd" type="button">copy</button>
-          </div>
-          <pre class="crypto" aria-label="How the login is sealed"><span class="c">// the login, as it leaves your browser</span>
-ss       = <b>X-Wing</b>(ML-KEM-768 + X25519)   <span class="c">// single-use server key</span>
-K_inner  = HKDF-SHA384(ss, challenge, <s>"aegis/v1/inner"</s>)
-K_outer  = HKDF-SHA384(ss, challenge, <s>"aegis/v1/outer"</s>)
-payload  = AES-256-GCM(K_outer, AES-256-GCM(K_inner, {user, pass}))</pre>
-          <a class="link-arrow" href="https://github.com/alexd-aero/aegis-burrow" target="_blank" rel="noopener">github.com/alexd-aero/aegis-burrow <i>↗</i></a>
-        </div>
-      </div>
+    <!-- work -->
+    <section class="sec wrap" id="work">
+      <h2>Everything else.</h2>
+      <p class="lede narrow">The rest of the stack, and a few things beside it. All on GitHub.</p>
+      <div class="work" id="work-list"></div>
     </section>
 
-    <!-- ───────────── WEFT / ECOSYSTEM ───────────── -->
-    <section class="sec weft" id="weft">
-      <div class="wrap weft-grid">
-        <div class="weft-copy">
-          <div class="sec-head reveal">
-            <span class="sec-num">03</span>
-            <span class="sec-kicker">How it fits together</span>
-          </div>
-          <h2 class="big reveal">Woven, <em>not bolted on.</em></h2>
-          <p class="lead reveal">In weaving, the warp threads stay put, and the <b>weft</b> is the thread that runs
-            across them and holds the cloth together.</p>
-          <p class="reveal">That's the idea behind <a href="https://github.com/alexd-aero/weft" target="_blank" rel="noopener">Weft</a>,
-            the addon format I wrote for my own hosts. A folder with one <code>forge-addon.json</code> and five bash scripts
-            installs, updates, reports and uninstalls in Selkies Forge and Aegis × Burrow alike, and running addons
-            find each other on the Weft mesh without anyone wiring them up.
-            The hosts are the warp; everything else is the weft.</p>
-          <p class="dim reveal" id="weft-hint">Hover a project to see what it's tied to.</p>
-          <div class="weft-info reveal" id="weft-info" aria-live="polite">
-            <b>Weft</b><span>The thread through all of it.</span>
-          </div>
-        </div>
-        <figure class="graph reveal">
-          <svg viewBox="0 0 560 560" id="graph" role="img" aria-label="How the projects connect"></svg>
-        </figure>
-      </div>
-    </section>
-
-    <!-- ───────────── WORK ───────────── -->
-    <section class="sec work" id="work">
-      <div class="wrap">
-        <div class="sec-head reveal">
-          <span class="sec-num">04</span>
-          <span class="sec-kicker">Everything else I ship</span>
-        </div>
-        <h2 class="big reveal">The rest of the <em>workshop.</em></h2>
-        <div class="cards" id="cards"></div>
-      </div>
-    </section>
-
-    <!-- ───────────── LOG ───────────── -->
-    <section class="sec log" id="log">
-      <div class="wrap">
-        <div class="sec-head reveal">
-          <span class="sec-num">05</span>
-          <span class="sec-kicker">Straight from GitHub</span>
-        </div>
-        <div class="log-head reveal">
-          <h2 class="big">Shipping log.</h2>
-          <p class="dim" id="log-src">The newest commits across my projects.</p>
-        </div>
-        <ol class="commits reveal" id="commits"></ol>
-      </div>
+    <!-- log -->
+    <section class="sec wrap" id="log">
+      <div class="log-head"><h2>Shipping log.</h2><p class="dim" id="log-src">The newest commits across my projects.</p></div>
+      <ol class="commits" id="commits"></ol>
     </section>
   </main>
 
-  <footer class="foot">
-    <div class="wrap foot-in">
-      <a class="foot-logo" href="#top"><em>ax</em>.</a>
-      <p class="foot-line">Built by Alex, mostly on a Raspberry Pi. <span class="dim">Dark on purpose.</span></p>
-      <nav class="foot-links" aria-label="Elsewhere">
-        <a href="https://github.com/alexd-aero" target="_blank" rel="noopener">GitHub ↗</a>
-        <a href="https://alexdatskov.bsite.net/" target="_blank" rel="noopener">Bio ↗</a>
-        <a href="#top">Back to top ↑</a>
-      </nav>
-    </div>
+  <footer class="foot wrap">
+    <span><b>ax.</b> Built by Alex, mostly on a Raspberry Pi.</span>
+    <nav><a href="https://github.com/alexd-aero" target="_blank" rel="noopener">GitHub</a><a href="https://alexdatskov.bsite.net/" target="_blank" rel="noopener">Bio</a><a href="#top">Top ↑</a></nav>
   </footer>
 </body>
 </html>

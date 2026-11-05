@@ -1,6 +1,6 @@
-// alex-aero.com — v4
-import { SNAPSHOT } from "./snapshot.js?v=4.0.0";
-import { film } from "./film.js?v=4.0.0";
+// alex-aero.com — v4.1
+import { SNAPSHOT } from "./snapshot.js?v=4.1.0";
+import { film } from "./film.js?v=4.1.0";
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -17,6 +17,7 @@ const h = (tag, props = {}, ...kids) => {
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const pick = (a) => a[(Math.random() * a.length) | 0];
 const rand = (a, b) => a + Math.random() * (b - a);
+const DAY = 864e5;
 
 function ago(iso) {
   const s = Math.max(0, (Date.now() - new Date(iso)) / 1000);
@@ -31,31 +32,23 @@ function splitVersion(msg) {
   return m ? [m[1], m[2]] : [null, msg];
 }
 
-/* ───────── projects ───────── */
+/* ───────── the mainstream projects (only these go on the site) ───────── */
 const P = {
-  "aegis-burrow": { name: "Aegis × Burrow", logo: "aegis-burrow" },
-  bulwark: { name: "Bulwark", logo: "bulwark" },
-  "animated-fiesta": { name: "Selkies Forge", logo: "forge", owner: "adatskov-wcpss",
+  "aegis-burrow": { name: "Aegis × Burrow", logo: "aegis-burrow", c: "#e8eaed" },
+  bulwark: { name: "Bulwark", logo: "bulwark", c: "#ff6a3d" },
+  "animated-fiesta": { name: "Selkies Forge", logo: "forge", owner: "adatskov-wcpss", c: "#7aa7ff",
     desc: "Any Linux machine, even a Raspberry Pi, becomes a launch pad for 153 Linux desktops in the browser. It downloads or builds the desktop, starts it in Docker, checks that it really works, and hands you a link. One file." },
-  "burrow-pages": { name: "Burrow Pages", logo: "burrow-pages",
-    desc: "Static sites from your GitHub or GitLab repos, an upload, or a site that lives elsewhere, on your own subdomains behind a password. Every push goes live. A Burrow extension." },
-  selfmail: { name: "selfmail", logo: "selfmail",
+  "burrow-pages": { name: "Burrow Pages", logo: "burrow-pages", c: "#3ddc97",
+    desc: "Static sites from your GitHub or GitLab repos, an upload, or a site that lives elsewhere, on your own subdomains behind a password. Every push goes live. Built as a Burrow extension." },
+  selfmail: { name: "selfmail", logo: "selfmail", c: "#4f8cff",
     desc: "A real mail server with a modern webmail app, for home servers that can't open port 25. Postfix and DKIM in one script, DNS through Cloudflare, undo send, every domain in one inbox." },
-  weft: { name: "Weft", logo: "weft",
+  weft: { name: "Weft", logo: "weft", c: "#c9b8ff",
     desc: "The addon format behind Selkies Forge and Aegis × Burrow: one manifest and five bash scripts, and a mesh where running addons find each other. Ships a validator and a brief for AI agents." },
-  "alex-aero-workers": { name: "Alex·Aero Workers", mono: "AX",
-    desc: "Cloudflare Workers on your own machine. JS and TS in workerd, Python, Shell or HTML, with KV, cron, versions with rollback and live logs. On your domain through a tunnel." },
-  "termix-autoupdate": { name: "termix-autoupdate", logo: "termix",
-    desc: "Keeps a Docker Termix, its BG Shell and Updater plugins (mine), and Aegis × Burrow up to date by themselves, daily." },
-  "onedrive-api": { name: "OneDrive Explorer", mono: "OD",
-    desc: "A single-file Flask OneDrive explorer: sign-in inside the app, streaming straight from Microsoft's CDN, an Ace editor and its own media players." },
-  "microvm-playground": { name: "MicroVM Playground", mono: "VM",
-    desc: "Disposable Linux playgrounds with a real terminal in the browser, on container, Firecracker or QEMU backends." },
 };
+const REPOS = Object.keys(P);
 const repoUrl = (id) => `https://github.com/${P[id]?.owner || "alexd-aero"}/${id}`;
-const mark = (id, cls = "") => P[id]?.logo ? h("img", { src: `assets/brand/${P[id].logo}.svg`, alt: "", class: cls }) : h("span", { class: "w-mono " + cls }, P[id]?.mono || "·");
-const WORK = ["animated-fiesta", "burrow-pages", "selfmail", "weft", "alex-aero-workers", "termix-autoupdate", "onedrive-api", "microvm-playground"];
-const COMMIT_REPOS = ["aegis-burrow", "bulwark", "animated-fiesta", "burrow-pages", "selfmail", "weft", "alex-aero-workers", "termix-autoupdate"];
+const logo = (id, cls = "") => h("img", { src: `assets/brand/${P[id].logo}.svg`, alt: "", class: cls });
+const WORK = ["animated-fiesta", "burrow-pages", "selfmail", "weft"];
 
 /* ───────── small things ───────── */
 function nav() {
@@ -67,10 +60,16 @@ function nav() {
     for (const e of es) if (e.isIntersecting) for (const [id, a] of links) a.classList.toggle("on", id === e.target.id);
   }, { rootMargin: "-45% 0px -50% 0px" });
   for (const id of links.keys()) { const s = document.getElementById(id); if (s) io.observe(s); }
+  // the phone menu
+  const btn = $("#menu-btn"), sheet = $("#menu");
+  const set = (open) => { sheet.hidden = !open; btn.setAttribute("aria-expanded", open); document.documentElement.classList.toggle("menu-open", open); };
+  btn.addEventListener("click", () => set(sheet.hidden));
+  sheet.addEventListener("click", (e) => { if (e.target.closest("a") || e.target === sheet) set(false); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") set(false); });
 }
 function reveal() {
   const io = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }, { rootMargin: "0px 0px -6% 0px" });
-  for (const el of $$(".banner, .split, .burrow-grid, .burrow-list, .bwc, .work, .commits, .cmd")) { el.classList.add("reveal"); io.observe(el); }
+  for (const el of $$(".banner, .split, .burrow-grid, .burrow-list, .bwc, .work, .board, .cmd")) { el.classList.add("reveal"); io.observe(el); }
 }
 function copyButtons() {
   for (const b of $$(".copy")) b.addEventListener("click", async () => {
@@ -92,15 +91,16 @@ function theFilm() {
   const f = film($("#player"), { reduced: REDUCED });
   const list = $("#chapters"), cap = $("#caption");
   const btns = f.scenes.map((s, i) => {
-    const b = h("button", { type: "button", onclick: () => f.jump(i) }, h("b", {}, String(Math.floor(s.start / 60)) + ":" + String(Math.floor(s.start % 60)).padStart(2, "0")), s.chapter);
+    const b = h("button", { type: "button", onclick: () => f.jump(i) }, h("b", {}, `${Math.floor(s.start / 60)}:${String(Math.floor(s.start % 60)).padStart(2, "0")}`), s.chapter);
     list.append(h("li", {}, b));
     return b;
   });
-  f.onScene((i, scenes) => {
-    if (i < 0) return;
+  f.onScene((i, scenes, text, changed) => {
     btns.forEach((b, k) => b.classList.toggle("on", k === i));
-    cap.textContent = scenes[i].caption;
+    if (changed && matchMedia("(max-width: 680px)").matches) { const b = btns[i]; if (b) list.scrollTo({ left: b.parentElement.offsetLeft - 16, behavior: "smooth" }); }
+    cap.textContent = text;
   });
+  f.seek(REDUCED ? 2 : 0);
 }
 
 /* ───────── burrow: the builder and the tunnel ───────── */
@@ -135,19 +135,12 @@ function burrow() {
     });
   }
   update();
-
-  // light going down the burrow
-  const g = $("#tunnel-pk"), arch = $("#tunnel-svg .a2");
-  const L = arch.getTotalLength();
-  const dots = [];
+  const g = $("#tunnel-pk"), arch = $("#tunnel-svg .a2"), L = arch.getTotalLength(), dots = [];
   for (let i = 0; i < 7; i++) { const c = document.createElementNS("http://www.w3.org/2000/svg", "circle"); c.setAttribute("r", "3.5"); g.append(c); dots.push({ c, k: i / 7, side: i % 2 }); }
   const draw = (dt) => {
     for (const d of dots) {
       d.k = (d.k + dt * 0.00018) % 1;
-      // in along one side of the middle arch, out to the light at the end
-      const s = d.side ? d.k : 1 - d.k;
-      const pt = arch.getPointAtLength(s * L);
-      const toLight = Math.max(0, (d.k - 0.82) / 0.18);
+      const pt = arch.getPointAtLength((d.side ? d.k : 1 - d.k) * L), toLight = Math.max(0, (d.k - 0.82) / 0.18);
       d.c.setAttribute("cx", pt.x + (200 - pt.x) * toLight);
       d.c.setAttribute("cy", pt.y + (215 - pt.y) * toLight);
       d.c.setAttribute("opacity", (1 - toLight) * Math.min(1, d.k * 6));
@@ -186,7 +179,6 @@ const TRAFFIC = [
   ["GET", "/xmlrpc.php"], ["GET", "/.aws/credentials"], ["GET", "/docker/containers/json"],
 ];
 const FLAG_NAMES = { double: "double-encoded", unicode: "%u escapes", overlong: "overlong UTF-8", nul: "null bytes", backslash: "backslashes", entity: "HTML entities", fold: "look-alike characters" };
-// documentation ranges only: nobody real. A small pool, so addresses come back and get banned.
 const POOL = Array.from({ length: 9 }, (_, i) => ["203.0.113.", "198.51.100.", "192.0.2."][i % 3] + (17 + i * 23));
 const YOU = "you (this browser)";
 
@@ -203,7 +195,6 @@ async function bulwark() {
     engineEl.classList.add("ok");
   } catch { engineEl.textContent = "the engine didn't load in this browser"; return; }
 
-  // the address book: points per address, the same rules as the gate (a payload is 5, 10 bans)
   const score = new Map(), banned = new Set(), cats = new Map();
   let nReq = 0, nDrop = 0, nBan = 0;
   function judge(m, p, ua, ip, count = true) {
@@ -211,7 +202,7 @@ async function bulwark() {
     let kind = r.score === 3 ? "drop" : r.score === 1 ? "warn" : "pass", ban = false;
     if (!count) return { r, kind, ban, pts: 0 };
     nReq++;
-    if (banned.has(ip)) { kind = "ban"; }
+    if (banned.has(ip)) kind = "ban";
     else if (kind === "drop") {
       nDrop++;
       const s = (score.get(ip) || 0) + 5; score.set(ip, s);
@@ -225,14 +216,11 @@ async function bulwark() {
     const top = [...cats.values()].sort((a, b) => b.n - a.n).slice(0, 7), max = top[0]?.n || 1;
     $("#cats").replaceChildren(...top.map(({ n, c }) => h("div", { class: "bar" }, h("span", {}, c?.short || "?"), h("i", { style: `width:${(n / max) * 100}%;background:${c?.color || "#888"}` }), h("b", {}, n))));
   }
-
-  // the probe: requests you send come from "you"
   const form = $("#probe"), input = $("#probe-path"), method = $("#probe-method"), steps = $$("#steps span");
   let timers = [];
   function show(m, path, ua = UA, ip = YOU, count = true) {
     if (!path.startsWith("/")) path = "/" + path;
     const { r, kind, ban, pts } = judge(m, path, ua, ip, count);
-    // you get let off after a ban, so you can keep trying things
     if (ban && ip === YOU) { banned.delete(YOU); score.delete(YOU); }
     const n = E.normalize(path);
     timers.forEach(clearTimeout); timers = [];
@@ -241,8 +229,7 @@ async function bulwark() {
     steps.forEach((s, i) => timers.push(setTimeout(() => { steps.forEach((x) => x.classList.remove("lit")); s.classList.add("lit"); }, i * step)));
     timers.push(setTimeout(() => {
       steps.forEach((x) => x.classList.remove("lit"));
-      const box = $("#verdict");
-      box.className = "verdict " + (ban || kind === "ban" ? "ban" : kind);
+      $("#verdict").className = "verdict " + (ban || kind === "ban" ? "ban" : kind);
       $("#v-badge").textContent = ban ? "banned" : kind === "ban" ? "already banned" : kind === "drop" ? "dropped" : kind === "warn" ? (r.probe ? "probe" : r.label ? "label" : "flagged") : "through";
       $("#v-name").textContent = r.name ? r.name[0].toUpperCase() + r.name.slice(1) : "A normal request";
       const facts = [];
@@ -270,8 +257,6 @@ async function bulwark() {
   }
   form.addEventListener("submit", (e) => { e.preventDefault(); show(method.value, input.value.trim() || "/"); });
   for (const [label, p, safe] of CHIPS) $("#chips").append(h("button", { type: "button", class: safe ? "safe" : "", onclick: () => { method.value = "GET"; input.value = p; show("GET", p); } }, label));
-
-  // the feed
   const feed = $("#feed");
   function feedOne() {
     const [m, p, ua] = pick(TRAFFIC);
@@ -280,10 +265,9 @@ async function bulwark() {
     const { r, kind, ban } = judge(m, p, ua || UA, ip);
     const c = r.cat ? E.cat(r.cat) : null;
     const vd = ban ? "banned · every tunnel" : kind === "ban" ? "banned" : kind === "drop" ? "dropped" : kind === "warn" ? (r.probe ? "probe" : "flagged") : "through";
-    const row = h("div", { class: `r ${kind === "ban" ? "drop ban" : kind}${ban ? " ban" : ""}`, title: "Open in the console", onclick: () => { method.value = m; input.value = p; show(m, p, ua || UA); $("#probe").scrollIntoView({ behavior: "smooth", block: "center" }); } },
+    feed.prepend(h("div", { class: `r ${kind === "ban" ? "drop ban" : kind}${ban ? " ban" : ""}`, title: "Open in the console", onclick: () => { method.value = m; input.value = p; show(m, p, ua || UA); $("#probe").scrollIntoView({ behavior: "smooth", block: "center" }); } },
       h("span", { class: "ip" }, ip), h("span", { class: "pth" }, h("s", {}, m + " "), ua ? `${p}  ua: ${ua}` : p),
-      h("span", { class: "ct", style: `--cc:${c?.color || "#5b616a"}` }, c?.short || "clean"), h("span", { class: "vd" }, vd));
-    feed.prepend(row);
+      h("span", { class: "ct", style: `--cc:${c?.color || "#5b616a"}` }, c?.short || "clean"), h("span", { class: "vd" }, vd)));
     while (feed.children.length > 9) feed.lastChild.remove();
     stats();
   }
@@ -297,57 +281,110 @@ async function bulwark() {
 function work() {
   $("#work-list").append(...WORK.map((id) => {
     const p = P[id];
-    return h("a", { class: "w-row", "data-repo": id, href: repoUrl(id), target: "_blank", rel: "noopener" },
-      mark(id), h("span", { class: "w-name" }, p.name, h("span", { class: "ver" })), h("span", { class: "w-desc" }, p.desc), h("span", { class: "w-meta" }));
+    return h("a", { class: "w-row", "data-repo": id, href: repoUrl(id), target: "_blank", rel: "noopener", style: `--c:${p.c}` },
+      logo(id), h("span", { class: "w-name" }, p.name, h("span", { class: "ver" })), h("span", { class: "w-desc" }, p.desc), h("span", { class: "w-meta" }));
   }));
 }
 
-/* ───────── live from GitHub ───────── */
-const CACHE_KEY = "ax-gh-4", CACHE_MS = 20 * 60 * 1000;
+/* ───────── the shipping log ───────── */
+const CACHE_KEY = "ax-gh-5", CACHE_MS = 20 * 60 * 1000;
 async function github() {
   try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); if (c && Date.now() - c.t < CACHE_MS) return { ...c.d, live: true }; } catch {}
   const get = async (p) => { const r = await fetch("https://api.github.com/" + p, { headers: { Accept: "application/vnd.github+json" } }); if (!r.ok) throw new Error(r.status); return r.json(); };
-  const res = await Promise.allSettled([get("users/alexd-aero/repos?per_page=100&sort=pushed"), ...COMMIT_REPOS.map((id) => get(`repos/${P[id].owner || "alexd-aero"}/${id}/commits?per_page=6`))]);
+  const res = await Promise.allSettled(REPOS.map((id) => get(`repos/${P[id].owner || "alexd-aero"}/${id}/commits?per_page=100`)));
   if (res.every((r) => r.status === "rejected")) return { ...SNAPSHOT, live: false };
-  const repos = { ...SNAPSHOT.repos };
-  if (res[0].status === "fulfilled") for (const r of res[0].value) if (P[r.name]) repos[r.name] = { pushed: r.pushed_at };
   const commits = [];
-  res.slice(1).forEach((r, i) => {
-    const id = COMMIT_REPOS[i];
+  res.forEach((r, i) => {
+    const id = REPOS[i];
     if (r.status !== "fulfilled") { commits.push(...SNAPSHOT.commits.filter((c) => c.repo === id)); return; }
     for (const c of r.value) commits.push({ repo: id, sha: c.sha.slice(0, 7), msg: c.commit.message.split("\n")[0], date: c.commit.author.date });
-    const d = r.value[0]?.commit.author.date;
-    if (d && (!repos[id]?.pushed || repos[id].pushed < d)) repos[id] = { pushed: d };
   });
   commits.sort((a, b) => (a.date < b.date ? 1 : -1));
-  const d = { at: new Date().toISOString(), repos, commits: commits.slice(0, 24) };
+  const d = { at: new Date().toISOString(), commits };
   try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d })); } catch {}
   return { ...d, live: true };
 }
-function render(data) {
-  const vers = {};
-  for (const c of data.commits) if (!vers[c.repo]) { const [v] = splitVersion(c.msg); if (v) vers[c.repo] = v; }
-  for (const el of $$("[data-ver]")) if (vers[el.dataset.ver]) el.textContent = vers[el.dataset.ver];
-  if (data.commits[0]) $("#nav-live").textContent = `pushed ${ago(data.commits[0].date)}`;
-  $("#commits").replaceChildren(...data.commits.slice(0, 12).map((c) => {
+// what kind of release a version is, next to the one before it in the same project
+function kinds(commits) {
+  const byRepo = {};
+  for (const c of [...commits].reverse()) {
     const [v, rest] = splitVersion(c.msg);
-    return h("li", {}, h("a", { href: `${repoUrl(c.repo)}/commit/${c.sha}`, target: "_blank", rel: "noopener" },
-      h("time", { datetime: c.date, title: new Date(c.date).toLocaleString() }, ago(c.date)),
-      h("span", { class: "repo-n" }, mark(c.repo), P[c.repo]?.name || c.repo),
-      h("span", { class: "msg" }, v ? h("b", {}, v) : null, rest),
-      h("span", { class: "sha" }, c.sha)));
+    c.ver = v; c.text = rest;
+    if (!v) { c.kind = "commit"; continue; }
+    const a = byRepo[c.repo]?.split(".").map(Number), b = v.split(".").map(Number);
+    c.kind = !a ? "release" : b[0] > a[0] ? "major" : b[1] > a[1] ? "feature" : b[2] > a[2] ? "fix" : "release";
+    byRepo[c.repo] = v;
+  }
+  return commits;
+}
+const KIND_LABEL = { major: "major", feature: "new", fix: "fix", release: "release", commit: "commit" };
+const dayKey = (d) => new Date(d).toLocaleDateString("en-CA");
+function dayName(key) {
+  if (key === dayKey(Date.now())) return "Today";
+  if (key === dayKey(Date.now() - DAY)) return "Yesterday";
+  return new Date(key + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
+}
+
+const LOG = { commits: [], filter: "all", shown: 14, live: false, at: null };
+function renderLog() {
+  const commits = LOG.commits, now = Date.now(), cut = now - 30 * DAY;
+  const recent = commits.filter((c) => new Date(c.date) > cut), releases = recent.filter((c) => c.ver), latest = commits.find((c) => c.ver);
+  $("#log-stats").replaceChildren(
+    h("div", {}, h("b", {}, releases.length), h("span", {}, "releases in 30 days")),
+    h("div", {}, h("b", {}, recent.length), h("span", {}, "commits in 30 days")),
+    h("div", {}, h("b", {}, new Set(recent.map((c) => dayKey(c.date))).size), h("span", {}, "of the last 30 days I shipped")),
+    h("div", {}, h("b", {}, latest ? ago(latest.date).replace(" ago", "") : "–"), h("span", {}, "since the last release")));
+  // the board: one row per project, with 30 days of activity
+  $("#board").replaceChildren(...REPOS.map((id) => {
+    const p = P[id], mine = commits.filter((c) => c.repo === id), rel = mine.find((c) => c.ver);
+    const days = Array.from({ length: 30 }, (_, i) => mine.filter((c) => dayKey(c.date) === dayKey(now - (29 - i) * DAY)).length);
+    const max = Math.max(1, ...days);
+    return h("button", { type: "button", class: "b-row" + (LOG.filter === id ? " on" : ""), style: `--c:${p.c}`, "aria-pressed": LOG.filter === id, onclick: () => { LOG.filter = LOG.filter === id ? "all" : id; LOG.shown = 14; renderLog(); } },
+      logo(id), h("span", { class: "b-name" }, h("b", {}, p.name), h("span", {}, rel ? `released ${ago(rel.date)}` : "no release yet")),
+      h("span", { class: "b-ver" }, rel ? rel.ver : "–"),
+      h("span", { class: "b-days", title: "commits a day, last 30 days" }, ...days.map((n, i) => h("i", { class: n ? "on" : "", style: n ? `opacity:${0.3 + 0.7 * (n / max)}` : "", title: `${dayName(dayKey(now - (29 - i) * DAY))}: ${n} commit${n === 1 ? "" : "s"}` }))),
+      h("span", { class: "b-n" }, h("b", {}, mine.filter((c) => c.ver && new Date(c.date) > cut).length), " releases"));
   }));
-  $("#log-src").textContent = data.live ? "The newest commits across my projects, live from GitHub." : `The newest commits across my projects, as of ${new Date(data.at).toLocaleDateString()}.`;
+  $("#log-filter").replaceChildren(...["all", ...REPOS].map((id) => h("button", { type: "button", class: LOG.filter === id ? "on" : "", onclick: () => { LOG.filter = id; LOG.shown = 14; renderLog(); } },
+    id === "all" ? "Everything" : [logo(id), P[id].name])));
+  // the timeline, grouped by day
+  const list = commits.filter((c) => LOG.filter === "all" || c.repo === LOG.filter), shown = list.slice(0, LOG.shown), groups = [];
+  for (const c of shown) { const k = dayKey(c.date); if (!groups.length || groups.at(-1).k !== k) groups.push({ k, items: [] }); groups.at(-1).items.push(c); }
+  $("#timeline").replaceChildren(...groups.map((g) => h("li", { class: "day" },
+    h("p", { class: "day-h" }, h("b", {}, dayName(g.k)), h("span", {}, `${g.items.length} change${g.items.length === 1 ? "" : "s"}`)),
+    h("ol", {}, ...g.items.map((c) => h("li", { class: `ev k-${c.kind}`, style: `--c:${P[c.repo].c}` },
+      h("a", { href: `${repoUrl(c.repo)}/commit/${c.sha}`, target: "_blank", rel: "noopener" },
+        logo(c.repo, "ev-logo"),
+        h("span", { class: "ev-main" },
+          h("span", { class: "ev-top" }, h("b", {}, P[c.repo].name), c.ver ? h("span", { class: "ev-ver" }, c.ver) : null, h("span", { class: "ev-kind" }, KIND_LABEL[c.kind])),
+          h("span", { class: "ev-msg" }, (c.text[0] || "").toUpperCase() + c.text.slice(1))),
+        h("span", { class: "ev-time" }, h("time", { datetime: c.date, title: new Date(c.date).toLocaleString() }, new Date(c.date).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })), h("code", {}, c.sha)))))))));
+  const more = $("#log-more");
+  more.hidden = list.length <= LOG.shown;
+  more.textContent = `Show ${Math.min(20, list.length - LOG.shown)} more`;
+  $("#log-src").textContent = LOG.live ? "Live from GitHub: every commit to my main projects." : `Every commit to my main projects, as of ${new Date(LOG.at).toLocaleDateString()}.`;
+}
+function renderMeta() {
+  const vers = {};
+  for (const c of LOG.commits) if (!vers[c.repo] && c.ver) vers[c.repo] = c.ver;
+  for (const el of $$("[data-ver]")) if (vers[el.dataset.ver]) el.textContent = vers[el.dataset.ver];
+  if (LOG.commits[0]) $("#nav-live").textContent = `pushed ${ago(LOG.commits[0].date)}`;
   for (const row of $$(".w-row")) {
-    const r = data.repos[row.dataset.repo], v = vers[row.dataset.repo];
-    if (v) $(".ver", row).textContent = v;
-    if (r?.pushed) $(".w-meta", row).replaceChildren(Date.now() - new Date(r.pushed) < 7 * 864e5 ? h("span", { class: "fresh" }, "● ") : "", `updated ${ago(r.pushed)}`);
+    const id = row.dataset.repo, last = LOG.commits.find((c) => c.repo === id);
+    if (vers[id]) $(".ver", row).textContent = vers[id];
+    if (last) $(".w-meta", row).replaceChildren(Date.now() - new Date(last.date) < 7 * DAY ? h("span", { class: "fresh" }, "● ") : "", `updated ${ago(last.date)}`);
   }
 }
+function useData(data) {
+  LOG.commits = kinds(data.commits.map((c) => ({ ...c })));
+  LOG.live = data.live; LOG.at = data.at;
+  renderMeta();
+  renderLog();
+}
 async function live() {
-  render({ ...SNAPSHOT, live: false });
-  try { render(await github()); } catch {}
-  setInterval(() => { for (const t of $$("#commits time")) t.textContent = ago(t.getAttribute("datetime")); }, 30e3);
+  $("#log-more").addEventListener("click", () => { LOG.shown += 20; renderLog(); });
+  useData({ ...SNAPSHOT, live: false });
+  try { useData(await github()); } catch {}
 }
 
 /* ───────── go ───────── */

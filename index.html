@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/site.css?v=4.0.0">
-  <script type="module" src="assets/site.js?v=4.0.0"></script>
+  <link rel="stylesheet" href="assets/site.css?v=4.1.0">
+  <script type="module" src="assets/site.js?v=4.1.0"></script>
 </head>
 <body>
   <header class="nav" id="nav">
@@ -26,8 +26,20 @@
       <a href="#work">Work</a>
       <a href="#log">Log</a>
     </nav>
-    <a class="live" href="#log" title="The newest push to any of my repositories"><i></i><span id="nav-live">shipping</span></a>
+    <a class="live" href="#log" title="The newest push to any of my main projects"><i></i><span id="nav-live">shipping</span></a>
+    <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
   </header>
+  <div class="menu" id="menu" hidden>
+    <nav aria-label="Sections">
+      <a href="#film"><b>Film</b><span>a minute and a half of it working</span></a>
+      <a href="#aegis"><b>Aegis × Burrow</b><span>the gate and the tunnels</span></a>
+      <a href="#burrow"><b>Burrow</b><span>try publishing a port</span></a>
+      <a href="#bulwark"><b>Bulwark</b><span>try to get banned</span></a>
+      <a href="#work"><b>The rest of the family</b><span>Selkies Forge, Burrow Pages, selfmail, Weft</span></a>
+      <a href="#log"><b>Shipping log</b><span>what I shipped, live</span></a>
+    </nav>
+    <p><a href="https://github.com/alexd-aero" target="_blank" rel="noopener">github.com/alexd-aero ↗</a></p>
+  </div>
 
   <main id="top">
     <!-- intro + film -->
@@ -41,10 +53,11 @@
         <img src="assets/brand/selfmail.svg" alt="selfmail" title="selfmail">
         <img src="assets/brand/weft.svg" alt="Weft" title="Weft">
       </div>
+      <p class="hi">Hi, I'm Alex <span>· alexd-aero</span></p>
       <h1>I build the gate, the tunnels and the shield for the machines you own.</h1>
-      <p class="lede">I'm Alex. Aegis × Burrow puts one post-quantum login in front of everything you
-        self-host and gives any port its own HTTPS address. Bulwark judges every request before it
-        lands. Most of it runs on a Raspberry Pi on my desk. Here are seventy seconds of it working.</p>
+      <p class="lede">Self-hosted software that feels finished. Aegis × Burrow puts one post-quantum login in
+        front of everything you run and gives any port its own HTTPS address; Bulwark judges every request
+        before it lands. Most of it runs on a Raspberry Pi on my desk. The film below is the real interfaces at work.</p>
     </section>
 
     <section class="film-sec wrap" id="film" aria-label="The Aegis × Burrow film">
@@ -192,15 +205,21 @@
 
     <!-- work -->
     <section class="sec wrap" id="work">
-      <h2>Everything else.</h2>
-      <p class="lede narrow">The rest of the stack, and a few things beside it. All on GitHub.</p>
+      <h2>The rest of the family.</h2>
+      <p class="lede narrow">They share one addon format, Weft, and plug into each other.</p>
       <div class="work" id="work-list"></div>
     </section>
 
     <!-- log -->
     <section class="sec wrap" id="log">
-      <div class="log-head"><h2>Shipping log.</h2><p class="dim" id="log-src">The newest commits across my projects.</p></div>
-      <ol class="commits" id="commits"></ol>
+      <div class="log-head">
+        <div><h2>Shipping log.</h2><p class="dim" id="log-src">Every commit to my main projects.</p></div>
+        <div class="log-stats" id="log-stats"></div>
+      </div>
+      <div class="board" id="board" aria-label="Each project: its latest release and the last 30 days"></div>
+      <div class="log-filter" id="log-filter" aria-label="Show"></div>
+      <ol class="timeline" id="timeline"></ol>
+      <button class="log-more" id="log-more" type="button" hidden>Show more</button>
     </section>
   </main>
 

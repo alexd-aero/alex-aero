@@ -1,0 +1,10 @@
+{ "width": 1280, "height": 674, "steps": [
+  { "go": "MOCK_URL/__reset", "wait": 300 },
+  { "go": "MOCK_URL/__gate/login", "wait": 2000, "snap": "login" },
+  { "go": "MOCK_URL/__gate/tunnels", "wait": 3500, "snap": "list" },
+  { "js": "document.querySelector('[data-act=new]').click()", "wait": 1500, "snap": "form" },
+  { "js": "(()=>{const s=(id,v)=>{const e=document.getElementById(id); e.value=v; e.dispatchEvent(new Event('input',{bubbles:true}));}; s('fPort','3000'); s('fName','Grafana'); s('fSub','grafana');})()", "wait": 900, "snap": "formFilled" },
+  { "js": "document.getElementById('fGo').click()", "wait": 2200, "snap": "detail" },
+  { "js": "location.hash='#/'", "wait": 900, "snap": "created" },
+  { "js": "1", "wait": 4200, "snap": "live" }
+] }

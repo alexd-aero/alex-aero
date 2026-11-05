@@ -1,0 +1,6 @@
+{ "width": 1280, "height": 674, "steps": [
+  { "go": "MOCK_URL/__reset", "wait": 300 },
+  { "go": "MOCK_URL/__gate/tunnels", "wait": 3000 },
+  { "js": "location.hash='#/machines'", "wait": 3500, "snap": "machines" },
+  { "js": "fetch('/__down')", "wait": 11500, "snap": "machinesDown" }
+] }

@@ -1,0 +1,8 @@
+{ "width": 1280, "height": 674, "steps": [
+  { "go": "BULWARK_URL#/", "wait": 4000 },
+  { "js": "([...document.querySelectorAll('#app button, #app a')].find(b=>b.textContent.trim()==='15m')||{click(){}}).click()", "wait": 2500, "snap": "bwOverview" },
+  { "js": "location.hash='#/log'", "wait": 3500, "snap": "bwLog" },
+  { "js": "location.hash='#/waves'", "wait": 3000, "snap": "bwWaves" },
+  { "js": "location.hash='#/patterns'", "wait": 3500, "snap": "bwPatterns" },
+  { "js": "location.hash='#/addresses'", "wait": 3000, "snap": "bwBlocklist" }
+] }

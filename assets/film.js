@@ -13,7 +13,7 @@ const io = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const eo = (x) => 1 - Math.pow(1 - x, 3);
 const typed = (s, t, a, cps = 16) => s.slice(0, clamp(Math.floor((t - a) * cps), 0, s.length));
 const B = "assets/brand/";
-const V = "4.2.0";
+const V = "4.3.0";
 
 /* ───────── real screens ───────── */
 // a browser window around a real page: the page renders at 1280 x 674 and is scaled to fit
@@ -55,6 +55,36 @@ function swap($$, list, t, fade = 0.25) {
   }
   return cur;
 }
+
+// 0 · the hook: three cuts of the real thing, full bleed, before anything is explained
+const CUTS = [
+  [0, 2.35, "bwWaves", "Bulwark", "74 addresses. One attack.<br>Stopped before it lands.", "62% 52%", "#ff6a3d"],
+  [2.35, 4.7, "detail", "Burrow", "Any port on your machine,<br>live on HTTPS in seconds.", "48% 58%", "#3ddc97"],
+  [4.7, 7.05, "machinesDown", "Aegis", "Every machine you own,<br>behind one login nobody can read.", "40% 62%", "#e8eaed"],
+];
+scene({
+  id: "hook", chapter: "In 7 seconds", dur: 7.5,
+  caption: "Bulwark stopping a 74-address attack campaign, Burrow putting a port online, Aegis watching every machine. All real screens. Here's how it works.",
+  html: `${CUTS.map(([, , snap, k, line], i) => `<div class="hk-cut" data-i="${i}">${slot(snap)}<div class="hk-shade"></div>
+      <div class="hk-txt"><p class="hk-k"><i></i>${k}</p><h3 class="hk-h">${line}</h3></div></div>`).join("")}
+    <div class="hk-bar"><i></i><i></i><i></i></div>`,
+  render(t, $, root) {
+    root.querySelectorAll(".hk-cut").forEach((cut, i) => {
+      const [a, b, , , , origin, color] = CUTS[i], u = clamp((t - a) / (b - a));
+      const vis = i === 0 ? (t < b ? 1 : clamp((b + 0.2 - t) / 0.2)) : clamp((t - a) / 0.2) * (i === CUTS.length - 1 ? 1 - seg(t, 7.05, 7.5) : t < b ? 1 : clamp((b + 0.2 - t) / 0.2));
+      cut.style.opacity = vis;
+      cut.style.visibility = vis > 0 ? "visible" : "hidden";
+      const rv = cut.querySelector(".rv");
+      rv.style.transformOrigin = origin;
+      rv.style.transform = `scale(${(720 / 674) * (1.16 - 0.1 * eo(u))})`;
+      rv.style.opacity = 1;
+      const k = eo(seg(t, a + 0.15, a + 0.75)) * (1 - seg(t, b - 0.25, b));
+      cut.querySelector(".hk-txt").style.cssText = `opacity:${k};transform:translateY(${26 * (1 - eo(seg(t, a + 0.15, a + 0.85)))}px);--kc:${color}`;
+    });
+    root.querySelectorAll(".hk-bar i").forEach((bar, i) => { bar.style.setProperty("--p", clamp((t - CUTS[i][0]) / (CUTS[i][1] - CUTS[i][0]))); });
+    $(".hk-bar").style.opacity = 1 - seg(t, 6.9, 7.3);
+  },
+});
 
 // 1 · title
 scene({
@@ -303,6 +333,7 @@ export function film(host, { reduced = false } = {}) {
         <div class="f-loading">loading the real screens…</div>
       </div>
       <button class="bigplay" type="button" aria-label="Play the film"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <p class="bigplay-label">Watch it work · ${fmt(SCENES.reduce((s, x) => s + x.dur, 0))}</p>
     </div>
     <div class="controls">
       <button class="pp" type="button" aria-label="Play"><svg viewBox="0 0 24 24"><path class="i-play" d="M8 5v14l11-7z"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z"/><path class="i-replay" d="M12 5a7 7 0 1 1-7 7h2a5 5 0 1 0 5-5v3L7 6l5-4z"/></svg></button>
@@ -358,7 +389,7 @@ export function film(host, { reduced = false } = {}) {
     }).catch((e) => { console.warn("film screens:", e); stage.querySelector(".f-loading").textContent = "the screens didn't load"; });
   }
 
-  let t = 0, playing = false, userPaused = false, last = 0, raf = 0, scene = -1, capNow = "";
+  let t = 0, playing = false, userPaused = false, last = 0, raf = 0, scene = -1, capNow = "", fresh = true;
   function cursorAt(kf, lt) {
     const pos = (f) => typeof f[1] === "string" ? at(f[1]) || { x: 640, y: 360 } : { x: f[1], y: f[2] };
     let i = 0;
@@ -396,7 +427,7 @@ export function film(host, { reduced = false } = {}) {
     if (a.captions) for (const [from, c] of a.captions) if (lt >= from) cap = c;
     if (active !== scene || cap !== capNow) { const changed = active !== scene; scene = active; capNow = cap; chap.textContent = a.chapter; listeners.forEach((f) => f(active, SCENES, cap, changed)); }
     host.classList.toggle("ended", t >= TOTAL);
-    host.classList.toggle("started", t > 0.05);
+    host.classList.toggle("started", !fresh);
   }
   function loop(now) {
     const dt = Math.min(0.1, (now - (last || now)) / 1000);
@@ -409,13 +440,15 @@ export function film(host, { reduced = false } = {}) {
   function play() {
     if (playing) return;
     load();
-    if (t >= TOTAL) t = 0;
+    if (t >= TOTAL || fresh) t = 0;
+    fresh = false;
     playing = true; last = 0; host.classList.add("playing");
     pp.setAttribute("aria-label", "Pause");
     raf = requestAnimationFrame(loop);
   }
   function pause() { playing = false; cancelAnimationFrame(raf); host.classList.remove("playing"); pp.setAttribute("aria-label", "Play"); }
   function seek(s) { t = clamp(s, 0, TOTAL); draw(); }
+  function poster() { t = 1.2; draw(); }
 
   // full screen: the real thing where the browser has it, a fixed overlay where it doesn't (iPhone)
   const isFs = () => document.fullscreenElement === host || document.webkitFullscreenElement === host || host.classList.contains("fs-on");
@@ -439,7 +472,7 @@ export function film(host, { reduced = false } = {}) {
   screen.addEventListener("click", () => { if (playing) { userPaused = true; pause(); } else { userPaused = false; play(); } });
   screen.addEventListener("dblclick", async () => { await toggleFs(); fsSync(); });
   let wasPlaying = false;
-  range.addEventListener("pointerdown", () => { wasPlaying = playing; pause(); load(); });
+  range.addEventListener("pointerdown", () => { wasPlaying = playing; fresh = false; pause(); load(); });
   range.addEventListener("input", () => seek(range.value / 10));
   range.addEventListener("change", () => { if (wasPlaying) play(); });
   host.addEventListener("keydown", async (e) => {
@@ -457,10 +490,10 @@ export function film(host, { reduced = false } = {}) {
     else if (e.intersectionRatio < 0.2 && !isFs()) pause();
   }, { threshold: [0, 0.2, 0.45, 0.7], rootMargin: "400px 0px" }).observe(screen);
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
-  seek(reduced ? 2 : 0);
+  poster();
   return {
     scenes: SCENES, total: TOTAL,
-    jump(i) { userPaused = false; load(); seek(SCENES[i].start + 0.01); play(); },
+    jump(i) { userPaused = false; fresh = false; load(); seek(SCENES[i].start + 0.01); play(); },
     onScene(f) { listeners.push(f); if (scene >= 0) f(scene, SCENES, capNow, true); },
     seek, play, pause,
   };

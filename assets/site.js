@@ -87,34 +87,37 @@ function whileVisible(el, fn) {
 }
 
 /* ───────── hello: the page opens the way the film used to ───────── */
-function hello() {
-  const sec = $("#hello"), hi = $(".hl-hi"), text = $(".hl-t"), full = text.textContent;
-  const later = [$(".hl-sub"), $(".hl-k"), ...$$(".hl-p"), $(".hl-go")];
-  let timers = [], done = false;
-  const at = (ms, f) => timers.push(setTimeout(f, ms));
-  function finish() {
-    if (done) return; done = true;
-    timers.forEach(clearTimeout);
-    text.textContent = full; sec.classList.add("typed");
-    hi.style.transition = "transform .6s cubic-bezier(.65,0,.35,1)"; hi.style.transform = "";
-    later.forEach((el) => el.classList.add("in"));
-    for (const ev of ["wheel", "touchmove", "keydown", "pointerdown"]) removeEventListener(ev, finish);
-  }
-  if (REDUCED || scrollY > 40 || location.hash) { sec.classList.add("typed"); return; }
-  sec.classList.add("anim");
-  // "Hi, I'm Alex." starts in the middle of the screen, bigger, and moves up once it's typed
-  const r = hi.getBoundingClientRect();
-  hi.style.transition = "none";
-  hi.style.transform = `translateY(${innerHeight / 2 - (r.top + r.height / 2)}px) scale(1.18)`;
-  text.textContent = "";
-  [...full].forEach((_, i) => at(300 + i * 90, () => { text.textContent = full.slice(0, i + 1); }));
-  at(2300, () => { sec.classList.add("typed"); hi.style.transition = "transform 1s cubic-bezier(.65,0,.35,1)"; hi.style.transform = ""; });
-  at(2900, () => later[0].classList.add("in"));
-  at(3700, () => later[1].classList.add("in"));
-  later.slice(2, -1).forEach((el, i) => at(3900 + i * 380, () => el.classList.add("in")));
-  at(6500, () => { later.at(-1).classList.add("in"); done = true; });
-  // anyone in a hurry gets it all at once
+// Letters rise out of a soft blur where the line will sit in the middle of the
+// screen, the line glides up to its place, and the rest follows, overlapping.
+// Compositor-only (transform, opacity, filter) and driven by the Web Animations API.
+const EXPO = "cubic-bezier(.16, 1, .3, 1)", GLIDE = "cubic-bezier(.65, 0, .35, 1)";
+async function hello() {
+  const root = document.documentElement, text = $(".hl-t"), hi = $(".hl-hi"), full = text.textContent;
+  text.replaceChildren(...[...full].map((ch) => h("span", { class: "hl-l" }, ch)));
+  const go = !(REDUCED || location.hash || scrollY > 40) && "animate" in Element.prototype;
+  if (!go) { root.classList.remove("hl-wait"); return; }
+  // fonts first, so nothing reflows mid-animation (but never wait long)
+  await Promise.race([document.fonts?.ready, new Promise((r) => setTimeout(r, 700))]);
+  const anims = [];
+  const run = (el, frames, o) => anims.push(el.animate(frames, { fill: "both", ...o }));
+  const rise = (el, delay, dist = 22, dur = 900, blur = 6) => run(el,
+    [{ opacity: 0, transform: `translateY(${dist}px)`, filter: `blur(${blur}px)` }, { opacity: 1, transform: "none", filter: "blur(0)" }], { duration: dur, delay, easing: EXPO });
+  // the line starts in the middle of the screen
+  const r = hi.getBoundingClientRect(), mid = innerHeight / 2 - (r.top + r.height / 2);
+  run(hi, [{ transform: `translateY(${mid}px)` }, { transform: `translateY(${mid}px)`, offset: 0.001 }, { transform: "none" }], { duration: 1200, delay: 1450, easing: GLIDE });
+  $$(".hl-l").forEach((l, i) => run(l, [{ opacity: 0, transform: "translateY(.32em)", filter: "blur(10px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }],
+    { duration: 1000, delay: 120 + i * 42, easing: EXPO }));
+  rise($(".hl-sub"), 2050, 18);
+  rise($(".hl-k"), 2350, 12, 700, 0);
+  $$(".hl-p").forEach((p, i) => run(p, [{ opacity: 0, transform: "translateY(26px) scale(.97)", filter: "blur(6px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }],
+    { duration: 950, delay: 2450 + i * 85, easing: EXPO }));
+  rise($(".hl-go"), 3150, 14);
+  root.classList.remove("hl-wait");
+  // anyone in a hurry gets it all at once; afterwards nothing is left holding a style
+  const finish = () => { anims.forEach((a) => a.finish()); off(); };
+  const off = () => { for (const ev of ["wheel", "touchmove", "keydown", "pointerdown"]) removeEventListener(ev, finish); };
   for (const ev of ["wheel", "touchmove", "keydown", "pointerdown"]) addEventListener(ev, finish, { passive: true });
+  Promise.all(anims.map((a) => a.finished)).then(() => { off(); anims.forEach((a) => a.cancel()); }).catch(() => {});
 }
 
 /* ───────── the film ───────── */
@@ -131,7 +134,13 @@ function theFilm() {
     if (changed && matchMedia("(max-width: 680px)").matches) { const b = btns[i]; if (b) list.scrollTo({ left: b.parentElement.offsetLeft - 16, behavior: "smooth" }); }
     cap.textContent = text;
   });
-  f.seek(REDUCED ? 2 : 0);
+  $("#hl-len").textContent = `${Math.floor(f.total / 60)}:${String(Math.floor(f.total % 60)).padStart(2, "0")}`;
+  // the hello's button plays it from the top
+  $(".hl-go").addEventListener("click", (e) => {
+    e.preventDefault();
+    $("#film").scrollIntoView({ behavior: REDUCED ? "auto" : "smooth", block: matchMedia("(max-width: 680px)").matches ? "start" : "center" });
+    f.jump(0);
+  });
 }
 
 /* ───────── burrow: the builder and the tunnel ───────── */

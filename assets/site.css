@@ -396,28 +396,27 @@ h2 { font-size: clamp(30px, 4vw, 46px); }
 .hello { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding: 104px 0 64px;
   background: radial-gradient(900px 520px at 50% 0, rgba(255,255,255,.07), transparent 70%); }
 .hello-in { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.hl-hi { max-width: none; background: none; color: inherit; font-size: clamp(54px, 9vw, 112px); line-height: 1; letter-spacing: -.045em; white-space: nowrap; transform-origin: 50% 50%; will-change: transform; }
-.hl-t { background: linear-gradient(180deg, #fff 30%, #b9bdc4); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hl-c { display: inline-block; width: .055em; height: .8em; margin-left: .07em; vertical-align: -.04em; background: #fff; animation: hl-blink 1s steps(1) infinite; }
-@keyframes hl-blink { 50% { opacity: 0; } }
-.hello.typed .hl-c { display: none; }
+.hl-hi { max-width: none; background: none; color: inherit; font-size: clamp(54px, 9vw, 112px); line-height: 1.04; letter-spacing: -.045em; white-space: nowrap; }
+.hl-t { display: inline-block; }
+.hl-l { display: inline-block; white-space: pre; background: linear-gradient(180deg, #fff 30%, #b9bdc4); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hl-sub { margin-top: 24px; font-size: clamp(19px, 2.2vw, 27px); line-height: 1.45; color: var(--text); }
 .hl-sub span { font-size: clamp(15px, 1.5vw, 19px); color: var(--muted); }
 .hl-k { margin-top: 48px; font: 500 13px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
 .hl-fam { width: 100%; margin-top: 18px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
-.hl-p { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 22px 12px 20px; border-radius: 18px; border: 1px solid var(--line); background: rgba(255,255,255,.025); text-decoration: none; transition: border-color .25s, background .25s, transform .5s var(--ease), opacity .7s var(--ease); }
+.hl-p { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 22px 12px 20px; border-radius: 18px; border: 1px solid var(--line); background: rgba(255,255,255,.025); text-decoration: none; transition: border-color .25s, background .25s; }
 .hl-p img { width: 64px; height: 64px; border-radius: 16px; transition: transform .5s var(--ease); }
 .hl-p b { font-size: 17px; font-weight: 600; color: var(--text); }
 .hl-p span { font-size: 13px; color: var(--muted); line-height: 1.4; }
 .hl-p:hover { border-color: var(--line-hi); background: rgba(255,255,255,.05); }
 .hl-p:hover img { transform: translateY(-3px) scale(1.04); }
-.hl-go { margin-top: 44px; display: inline-flex; align-items: center; gap: 10px; font-size: 20px; color: var(--muted); text-decoration: none; transition: color .2s; }
-.hl-go:hover { color: var(--text); }
-.hl-go i { font-style: normal; display: inline-block; animation: hl-bob 1.8s var(--ease) infinite; }
-@keyframes hl-bob { 50% { transform: translateY(5px); } }
-/* while it plays: everything after the hello waits its turn */
-.hello.anim .hl-sub, .hello.anim .hl-k, .hello.anim .hl-p, .hello.anim .hl-go { opacity: 0; transform: translateY(22px); transition: opacity .7s var(--ease), transform .7s var(--ease), border-color .25s, background .25s; }
-.hello.anim .in { opacity: 1; transform: none; }
+.hl-go { margin-top: 44px; display: inline-flex; align-items: center; gap: 12px; padding: 8px 18px 8px 8px; border-radius: 99px; border: 1px solid var(--line-2); background: rgba(255,255,255,.03);
+  font-size: 17px; font-weight: 500; color: var(--text); text-decoration: none; transition: border-color .25s, background .25s, transform .4s var(--ease); }
+.hl-go:hover { border-color: var(--line-hi); background: rgba(255,255,255,.07); }
+.hl-go:active { transform: scale(.98); }
+.hl-play { width: 38px; height: 38px; border-radius: 50%; background: #fff; color: #000; display: grid; place-items: center; animation: hl-ring 2.4s ease-out infinite; }
+.hl-play svg { width: 16px; height: 16px; fill: currentColor; margin-left: 2px; }
+.hl-go em { font: 12.5px var(--mono); font-style: normal; color: var(--faint); }
+@keyframes hl-ring { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,.35); } 70%, 100% { box-shadow: 0 0 0 12px rgba(255,255,255,0); } }
 
 /* ── the film: real screens, the hello, notes, full screen ── */
 .hi { font: 500 15px var(--sans); color: var(--text); margin-bottom: 14px; }
@@ -427,6 +426,19 @@ h2 { font-size: clamp(30px, 4vw, 46px); }
 .rv:first-child { opacity: 1; }
 .f-loading { position: absolute; right: 24px; bottom: 18px; font: 13px var(--mono); color: var(--faint); z-index: 30; transition: opacity .3s; }
 .stage.ready .f-loading { opacity: 0; }
+/* the hook */
+.hk-cut { position: absolute; inset: 0; overflow: hidden; background: #000; visibility: hidden; }
+.hk-cut .rv { opacity: 1; }
+.hk-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,.55) 62%, rgba(0,0,0,.92) 100%); }
+.hk-txt { position: absolute; left: 76px; right: 76px; bottom: 74px; opacity: 0; }
+.hk-k { display: flex; align-items: center; gap: 10px; font: 600 15px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--kc); }
+.hk-k i { width: 9px; height: 9px; border-radius: 50%; background: var(--kc); box-shadow: 0 0 14px var(--kc); }
+.hk-h { margin-top: 14px; font: 600 64px/1.04 var(--sans); letter-spacing: -.04em; color: #fff; text-shadow: 0 4px 40px rgba(0,0,0,.6); }
+.hk-bar { position: absolute; left: 76px; right: 76px; top: 34px; display: flex; gap: 8px; z-index: 5; }
+.hk-bar i { flex: 1; height: 4px; border-radius: 4px; background: rgba(255,255,255,.2); overflow: hidden; position: relative; }
+.hk-bar i::after { content: ""; position: absolute; inset: 0; background: #fff; transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+.bigplay-label { position: absolute; left: 0; right: 0; top: calc(50% + 52px); z-index: 5; text-align: center; font: 600 15px var(--sans); color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,.8); pointer-events: none; transition: opacity .3s; }
+.player.started .bigplay-label, .player.playing .bigplay-label { opacity: 0; }
 .f-note { position: absolute; left: 0; top: 0; z-index: 15; pointer-events: none; opacity: 0; display: flex; align-items: center; gap: 9px; max-width: 520px; padding: 10px 15px; border-radius: 12px;
   background: rgba(12,13,15,.94); border: 1px solid rgba(255,255,255,.18); box-shadow: 0 14px 40px rgba(0,0,0,.6); font-size: 16px; color: #fff; backdrop-filter: blur(8px); }
 .f-note > i { width: 8px; height: 8px; border-radius: 50%; background: #ff6a3d; box-shadow: 0 0 10px #ff6a3d; flex: none; }
@@ -495,7 +507,7 @@ html.menu-open { overflow: hidden; }
   .hl-p img { width: 48px; height: 48px; border-radius: 12px; }
   .hl-p b { font-size: 15px; }
   .hl-p span { font-size: 12px; }
-  .hl-go { margin-top: 30px; font-size: 17px; }
+  .hl-go { margin-top: 30px; font-size: 15.5px; }
   body { font-size: 15.5px; }
   .wrap { padding: 0 16px; }
   .nav { padding: 10px 16px; gap: 12px; }

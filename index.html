@@ -13,8 +13,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/site.css?v=4.2.0">
-  <script type="module" src="assets/site.js?v=4.2.0"></script>
+  <script>
+    // hide the hello before the first paint, so it never flashes finished before it plays
+    try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches && !location.hash) { document.documentElement.classList.add("hl-wait"); setTimeout(() => document.documentElement.classList.remove("hl-wait"), 4000); } } catch {}
+  </script>
+  <style>
+    /* before anything else loads: a black page, and the hello hidden until it plays */
+    html { background: #030304; }
+    html.hl-wait .hl-t, html.hl-wait .hl-sub, html.hl-wait .hl-k, html.hl-wait .hl-p, html.hl-wait .hl-go { opacity: 0; }
+  </style>
+  <link rel="stylesheet" href="assets/site.css?v=4.3.0">
+  <script type="module" src="assets/site.js?v=4.3.0"></script>
 </head>
 <body>
   <header class="nav" id="nav">
@@ -45,7 +54,7 @@
     <!-- intro + film -->
     <section class="hello" id="hello">
       <div class="wrap hello-in">
-        <h1 class="hl-hi" aria-label="Hi, I'm Alex."><span class="hl-t" aria-hidden="true">Hi, I'm Alex.</span><i class="hl-c" aria-hidden="true"></i></h1>
+        <h1 class="hl-hi" aria-label="Hi, I'm Alex."><span class="hl-t" aria-hidden="true">Hi, I'm Alex.</span></h1>
         <p class="hl-sub">I build self-hosted software that feels finished.<br><span>Zero dependencies where I can. Most of it runs on a Raspberry Pi on my desk.</span></p>
         <p class="hl-k">what I've built</p>
         <div class="hl-fam">
@@ -56,7 +65,7 @@
           <a class="hl-p" href="#work"><img src="assets/brand/selfmail.svg" alt=""><b>selfmail</b><span>a mail server for home servers</span></a>
           <a class="hl-p" href="#work"><img src="assets/brand/weft.svg" alt=""><b>Weft</b><span>the addon format that ties them together</span></a>
         </div>
-        <a class="hl-go" href="#film">Let me show you the big one <i>↓</i></a>
+        <a class="hl-go" href="#film"><span class="hl-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span>Let me show you the big one</span><em id="hl-len">1:30</em></a>
       </div>
     </section>
 

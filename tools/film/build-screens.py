@@ -28,6 +28,7 @@ def pin(style):     # viewport units inside a style attribute only (never inside
     return re.sub(r"(-?\d*\.?\d+)(?:d|s|l)?vw\b", lambda m: vpx(m, 12.8), style)
 for v in out.values():
     v["html"] = re.sub(r'style="([^"]*)"', lambda m: 'style="' + pin(m.group(1)) + '"', v["html"])
+    v["html"] = re.sub(r'\sautofocus(="[^"]*")?', "", v["html"])     # a snapshot must never grab focus (and scroll the page)
     v["html"] = v["html"].replace("/__gate/logos/", "assets/real/logos/").replace('src="logo.svg', 'src="assets/brand/bulwark.svg')
 s = json.dumps(out)
 for bad in ["/home/", "/Users/", "192.168.", "src=\"logo.svg"]:   # nothing from a real machine

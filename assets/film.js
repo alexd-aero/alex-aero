@@ -13,7 +13,7 @@ const io = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const eo = (x) => 1 - Math.pow(1 - x, 3);
 const typed = (s, t, a, cps = 16) => s.slice(0, clamp(Math.floor((t - a) * cps), 0, s.length));
 const B = "assets/brand/";
-const V = "4.1.0";
+const V = "4.2.0";
 
 /* ───────── real screens ───────── */
 // a browser window around a real page: the page renders at 1280 x 674 and is scaled to fit
@@ -35,7 +35,7 @@ function mountSnap(el, snap) {
   root.innerHTML = `<link rel="stylesheet" href="${CSS[KIND[el.dataset.snap]]}">
     <style>:host{all:initial;display:block}.x-html,.x-body{height:100%;min-height:0!important}.x-body{overflow:hidden!important}
       *{animation-play-state:running}.rv-hide{display:none!important}</style>
-    <div class="x-html ${snap.htmlClass || ""}"><div class="x-body" ${attrs}>${snap.html}</div></div>`;
+    <div class="x-html ${snap.htmlClass || ""}"><div class="x-body" ${attrs}>${snap.html.replace(/\sautofocus(="[^"]*")?/g, "")}</div></div>`;
   return root;
 }
 
@@ -55,44 +55,6 @@ function swap($$, list, t, fade = 0.25) {
   }
   return cur;
 }
-
-// 0 · hello
-const FAMILY = [
-  ["aegis-burrow", "Aegis × Burrow", "a post-quantum gate on a tunnel engine"],
-  ["bulwark", "Bulwark", "a shield that judges every request"],
-  ["forge", "Selkies Forge", "153 Linux desktops in a browser tab"],
-  ["burrow-pages", "Burrow Pages", "your repos, live on your own domain"],
-  ["selfmail", "selfmail", "a mail server for home servers"],
-  ["weft", "Weft", "the addon format that ties them together"],
-];
-scene({
-  id: "hello", chapter: "Hi, I'm Alex", dur: 10,
-  caption: "Hi, I'm Alex (alexd-aero). I build self-hosted software, and most of it runs on a Raspberry Pi on my desk.",
-  html: `
-    <div class="f-hello">
-      <p class="h-hi"><span class="h-t"></span><i class="h-c"></i></p>
-      <p class="h-sub">I build self-hosted software that feels finished.<br><span>Zero dependencies where I can. Most of it runs on a Raspberry Pi on my desk.</span></p>
-      <p class="h-k">what I've built</p>
-      <div class="h-fam">${FAMILY.map(([logo, name, line]) => `<div class="h-p"><img src="${B}${logo}.svg" alt=""><b>${name}</b><span>${line}</span></div>`).join("")}</div>
-      <p class="h-go">Let me show you the big one.</p>
-    </div>`,
-  render(t, $, root) {
-    $(".h-t").textContent = typed("Hi, I'm Alex.", t, 0.3, 11);
-    $(".h-c").style.opacity = t < 2.2 ? (Math.floor(t * 2.5) % 2 ? 0 : 1) : 0;
-    const up = io(seg(t, 2.3, 3.2));
-    $(".h-hi").style.transform = `translateY(${-178 * up}px) scale(${1 - 0.34 * up})`;
-    const out = 1 - seg(t, 8.7, 9.3);
-    $(".h-sub").style.cssText = `opacity:${seg(t, 2.9, 3.5) * out};transform:translateY(${10 * (1 - eo(seg(t, 2.9, 3.6)))}px)`;
-    $(".h-k").style.opacity = seg(t, 3.9, 4.4) * out;
-    root.querySelectorAll(".h-p").forEach((p, i) => {
-      const k = eo(seg(t, 4.1 + i * 0.38, 4.7 + i * 0.38));
-      const keep = i === 0 ? 1 : out;
-      p.style.cssText = `opacity:${k * keep};transform:translateY(${(1 - k) * 26}px)`;
-    });
-    $(".h-go").style.opacity = seg(t, 7.0, 7.5) * out;
-    $(".f-hello").style.opacity = 1 - seg(t, 9.4, 10);
-  },
-});
 
 // 1 · title
 scene({

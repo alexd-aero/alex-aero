@@ -1,6 +1,6 @@
 // alex-aero.com — v4.1
-import { SNAPSHOT } from "./snapshot.js?v=4.1.0";
-import { film } from "./film.js?v=4.1.0";
+import { SNAPSHOT } from "./snapshot.js?v=4.2.0";
+import { film } from "./film.js?v=4.2.0";
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -84,6 +84,37 @@ function whileVisible(el, fn) {
   const set = (v) => { if (v === on) return; on = v; if (on) { last = 0; raf = requestAnimationFrame(loop); } else cancelAnimationFrame(raf); };
   new IntersectionObserver(([e]) => { seen = e.isIntersecting; set(seen && !document.hidden); }).observe(el);
   document.addEventListener("visibilitychange", () => set(seen && !document.hidden));
+}
+
+/* ───────── hello: the page opens the way the film used to ───────── */
+function hello() {
+  const sec = $("#hello"), hi = $(".hl-hi"), text = $(".hl-t"), full = text.textContent;
+  const later = [$(".hl-sub"), $(".hl-k"), ...$$(".hl-p"), $(".hl-go")];
+  let timers = [], done = false;
+  const at = (ms, f) => timers.push(setTimeout(f, ms));
+  function finish() {
+    if (done) return; done = true;
+    timers.forEach(clearTimeout);
+    text.textContent = full; sec.classList.add("typed");
+    hi.style.transition = "transform .6s cubic-bezier(.65,0,.35,1)"; hi.style.transform = "";
+    later.forEach((el) => el.classList.add("in"));
+    for (const ev of ["wheel", "touchmove", "keydown", "pointerdown"]) removeEventListener(ev, finish);
+  }
+  if (REDUCED || scrollY > 40 || location.hash) { sec.classList.add("typed"); return; }
+  sec.classList.add("anim");
+  // "Hi, I'm Alex." starts in the middle of the screen, bigger, and moves up once it's typed
+  const r = hi.getBoundingClientRect();
+  hi.style.transition = "none";
+  hi.style.transform = `translateY(${innerHeight / 2 - (r.top + r.height / 2)}px) scale(1.18)`;
+  text.textContent = "";
+  [...full].forEach((_, i) => at(300 + i * 90, () => { text.textContent = full.slice(0, i + 1); }));
+  at(2300, () => { sec.classList.add("typed"); hi.style.transition = "transform 1s cubic-bezier(.65,0,.35,1)"; hi.style.transform = ""; });
+  at(2900, () => later[0].classList.add("in"));
+  at(3700, () => later[1].classList.add("in"));
+  later.slice(2, -1).forEach((el, i) => at(3900 + i * 380, () => el.classList.add("in")));
+  at(6500, () => { later.at(-1).classList.add("in"); done = true; });
+  // anyone in a hurry gets it all at once
+  for (const ev of ["wheel", "touchmove", "keydown", "pointerdown"]) addEventListener(ev, finish, { passive: true });
 }
 
 /* ───────── the film ───────── */
@@ -389,6 +420,7 @@ async function live() {
 
 /* ───────── go ───────── */
 nav();
+hello();
 theFilm();
 burrow();
 work();

@@ -1,60 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-[#030304]">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>404 — ax.</title>
-  <link rel="icon" href="/assets/brand/aegis-burrow.svg" type="image/svg+xml">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <title>404 · Nothing at the end of this tunnel</title>
+  <meta name="theme-color" content="#030304">
+  <link rel="icon" href="/assets/brand/burrow.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"], mono: ["JetBrains Mono", "ui-monospace", "monospace"] },
+          colors: { ink: "#030304", line: "rgba(255,255,255,.1)", ok: "#3ddc97" },
+          keyframes: {
+            fly: { "0%": { transform: "translate(-50%,-50%) scale(.04)", opacity: "0" }, "12%": { opacity: ".9" }, "70%": { opacity: ".55" }, "100%": { transform: "translate(-50%,-50%) scale(3.4)", opacity: "0" } },
+            streak: { "0%": { transform: "rotate(var(--a)) translateX(2vmin) scaleX(.1)", opacity: "0" }, "20%": { opacity: "1" }, "100%": { transform: "rotate(var(--a)) translateX(75vmax) scaleX(1)", opacity: "0" } },
+            breathe: { "0%,100%": { transform: "translate(-50%,-50%) scale(1)", opacity: ".85" }, "50%": { transform: "translate(-50%,-50%) scale(1.18)", opacity: "1" } },
+            rise: { "0%": { opacity: "0", transform: "translateY(24px)", filter: "blur(10px)" }, "100%": { opacity: "1", transform: "none", filter: "blur(0)" } },
+            sheen: { "0%": { backgroundPosition: "200% 0" }, "100%": { backgroundPosition: "-100% 0" } },
+            blink: { "50%": { opacity: "0" } },
+          },
+          animation: {
+            fly: "fly 6s cubic-bezier(.55,0,.9,.6) infinite",
+            streak: "streak 2.6s cubic-bezier(.6,0,1,.6) infinite",
+            breathe: "breathe 4s ease-in-out infinite",
+            rise: "rise 1.1s cubic-bezier(.16,1,.3,1) both",
+            sheen: "sheen 5s ease-in-out 1.6s infinite",
+            blink: "blink 1s steps(1) infinite",
+          },
+        },
+      },
+    };
+  </script>
   <style>
-    :root { --bg: #030304; --ink: #ece7de; --mute: rgba(236,231,222,.6); --faint: rgba(236,231,222,.35); --gold: #d6b45c; --bw: #ff5a3d; color-scheme: dark; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; background: var(--bg); color: var(--ink); font-family: "Inter", system-ui, sans-serif; overflow: hidden; padding: 24px; }
-    canvas { position: fixed; inset: 0; width: 100%; height: 100%; }
-    .box { position: relative; text-align: center; max-width: 520px; }
-    .code { font: 600 clamp(96px, 22vw, 180px)/.9 "Inter", sans-serif; letter-spacing: -.06em; background: linear-gradient(180deg, #fff 30%, #b9bdc4); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .code em { font-style: normal; }
-    p { margin-top: 18px; color: var(--mute); font-size: 17px; font-weight: 300; }
-    .tag { display: inline-block; margin-top: 22px; font: 12px "JetBrains Mono", monospace; color: var(--faint); padding: 6px 10px; border: 1px solid rgba(255,255,255,.1); border-radius: 99px; }
-    .tag b { color: var(--bw); font-weight: 400; }
-    a.home { display: inline-flex; gap: 8px; margin-top: 30px; color: var(--ink); text-decoration: none; padding: 13px 22px; border-radius: 99px; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.04); transition: background .2s, border-color .2s; }
-    a.home:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.3); }
+    .arch { position: absolute; left: 50%; top: var(--vy); width: 46vmin; height: 46vmin; will-change: transform, opacity; }
+    .streak { position: absolute; left: 50%; top: var(--vy); width: 22vmin; height: 1.5px; transform-origin: 0 50%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.85)); will-change: transform, opacity; }
+    .num { background: linear-gradient(100deg, #8d9299 0%, #fff 35%, #fff 45%, #b9bdc4 55%, #8d9299 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; }
+    @media (prefers-reduced-motion: reduce) { .motion-safe-off * { animation: none !important; } }
   </style>
 </head>
-<body>
-  <canvas id="c" aria-hidden="true"></canvas>
-  <main class="box">
-    <div class="code">4<em>0</em>4</div>
-    <p>This thread came loose. Nothing is woven here.</p>
-    <span class="tag" id="tag">GET <b id="path">/</b> → not found</span><br>
-    <a class="home" href="/">← Back to the loom</a>
+<body class="min-h-screen overflow-hidden bg-ink font-sans text-[#eceef0] antialiased selection:bg-white selection:text-black">
+
+  <!-- the tunnel: arches flying past, light at the end -->
+  <div id="tunnel" style="--vy:31%" class="pointer-events-none fixed inset-0 transition-transform duration-700 ease-out motion-reduce:hidden" aria-hidden="true">
+    <div class="absolute inset-0 bg-[radial-gradient(60vmin_60vmin_at_50%_31%,rgba(61,220,151,.12),transparent_70%)]"></div>
+    <div id="arches"></div>
+    <div id="streaks"></div>
+    <div class="absolute left-1/2 top-[31%] h-[30vmin] w-[30vmin] animate-breathe rounded-full bg-[radial-gradient(circle,rgba(255,255,255,.9)_0%,rgba(61,220,151,.35)_18%,rgba(61,220,151,0)_62%)] blur-[2px]"></div>
+    <div class="absolute left-1/2 top-[31%] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_30px_10px_rgba(255,255,255,.7)]"></div>
+  </div>
+  <!-- a vignette, so the words stay readable over the flight -->
+  <div class="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_50%_31%,rgba(3,3,4,0)_0%,rgba(3,3,4,.5)_38%,rgba(3,3,4,.95)_100%)]" aria-hidden="true"></div>
+
+  <header class="fixed inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-4 sm:px-8">
+    <a href="/" class="font-mono text-lg font-semibold tracking-tight text-white/90 transition hover:text-white">ax.</a>
+    <a href="https://github.com/alexd-aero" target="_blank" rel="noopener" class="font-mono text-xs text-white/40 transition hover:text-white/80">github.com/alexd-aero ↗</a>
+  </header>
+
+  <main class="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 text-center">
+    <p class="animate-rise font-mono text-[11px] uppercase tracking-[.28em] text-ok/80 [animation-delay:.15s]">
+      <span class="mr-2 inline-block h-1.5 w-1.5 -translate-y-px rounded-full bg-ok shadow-[0_0_10px_#3ddc97]"></span><span class="hidden sm:inline">Burrow · </span>no tunnel at this address
+    </p>
+
+    <h1 class="num mt-5 animate-[rise_1.2s_cubic-bezier(.16,1,.3,1)_.3s_both,sheen_5s_ease-in-out_1.8s_infinite] select-none text-[34vw] font-bold leading-[.85] tracking-[-.07em] sm:text-[220px]">404</h1>
+
+    <h2 class="mt-6 animate-rise text-3xl font-semibold tracking-tight text-white [text-shadow:0_4px_30px_#030304] [animation-delay:.55s] sm:text-5xl">Nothing at the end of this tunnel.</h2>
+    <p class="mt-4 max-w-md animate-rise text-base text-white/70 [text-shadow:0_2px_18px_#030304] [animation-delay:.7s] sm:text-lg">
+      The page you asked for isn't here. It moved, or it never existed.
+    </p>
+
+    <div class="mt-7 inline-flex max-w-full animate-rise items-center gap-3 overflow-hidden rounded-xl border border-line bg-white/[.03] px-4 py-2.5 font-mono text-[13px] backdrop-blur [animation-delay:.85s]">
+      <span class="text-white/40">GET</span>
+      <span id="path" class="truncate text-white">/</span>
+      <span class="text-white/30">→</span>
+      <span class="rounded-md bg-[#f2b53c]/15 px-1.5 py-0.5 text-[#f2b53c]">404</span>
+      <span class="hidden text-white/35 sm:inline">in <b id="us" class="font-medium text-white/70">3</b> µs</span>
+    </div>
+
+    <div class="mt-9 flex animate-rise flex-wrap items-center justify-center gap-3 [animation-delay:1s]">
+      <a href="/" class="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-[15px] font-semibold text-black shadow-[0_10px_40px_-10px_rgba(255,255,255,.6)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_50px_-10px_rgba(255,255,255,.8)] active:translate-y-0">
+        <svg class="h-4 w-4 transition group-hover:-translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        Back home
+      </a>
+      <a href="/#film" class="group inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[.04] py-2 pl-2 pr-5 text-[15px] font-medium text-white backdrop-blur transition hover:border-white/30 hover:bg-white/[.08]">
+        <span class="grid h-8 w-8 place-items-center rounded-full bg-white/10 transition group-hover:bg-white group-hover:text-black">
+          <svg class="ml-0.5 h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        Watch the film
+      </a>
+    </div>
+
+    <nav class="mt-12 flex animate-rise flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/40 [animation-delay:1.15s]" aria-label="Or go to">
+      <a class="transition hover:text-white" href="/#burrow">Burrow</a>
+      <a class="transition hover:text-white" href="/#bulwark">Bulwark</a>
+      <a class="transition hover:text-white" href="/#work">Projects</a>
+      <a class="transition hover:text-white" href="/#log">Shipping log</a>
+    </nav>
   </main>
+
   <script>
-    document.getElementById("path").textContent = location.pathname.slice(0, 60);
-    const cv = document.getElementById("c"), ctx = cv.getContext("2d");
-    let W, H, T = [];
-    function size() {
-      const d = Math.min(devicePixelRatio || 1, 2);
-      W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
-      T = Array.from({ length: Math.round(H / 30) }, (_, i) => ({ y: H * (i + .5) / Math.round(H / 30), a: 6 + Math.random() * 16, f: .002 + Math.random() * .003, p: Math.random() * 6, s: Math.random() < .5 ? -1 : 1 }));
+    // the path that wasn't found
+    const p = decodeURIComponent(location.pathname + location.search);
+    document.getElementById("path").textContent = p.length > 48 ? p.slice(0, 47) + "…" : p;
+    document.getElementById("path").title = p;
+    document.getElementById("us").textContent = (2 + Math.random() * 3).toFixed(1);
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce) {
+      // the arches: Burrow's own, one after another, rushing past
+      const ARCH = (o) => `<svg viewBox="0 0 128 128" class="h-full w-full"><path d="M20 112V64a44 44 0 0 1 88 0v48" fill="none" stroke="rgba(255,255,255,${o})" stroke-width="2.2" stroke-linecap="round" vector-effect="non-scaling-stroke"/><path d="M8 112h112" stroke="rgba(255,255,255,${o * 0.35})" stroke-width="1.4" vector-effect="non-scaling-stroke"/></svg>`;
+      const arches = document.getElementById("arches"), N = 12;
+      for (let i = 0; i < N; i++) {
+        const d = document.createElement("div");
+        d.className = "arch animate-fly";
+        d.style.animationDelay = `${(-i * 6) / N}s`;
+        d.innerHTML = ARCH(i % 3 === 0 ? 0.9 : 0.55);
+        arches.append(d);
+      }
+      // light streaking past
+      const streaks = document.getElementById("streaks");
+      for (let i = 0; i < 26; i++) {
+        const s = document.createElement("i");
+        s.className = "streak animate-streak";
+        s.style.setProperty("--a", `${(i * 360) / 26 + Math.random() * 10}deg`);
+        s.style.animationDelay = `${-Math.random() * 2.6}s`;
+        s.style.animationDuration = `${2 + Math.random() * 1.6}s`;
+        s.style.opacity = 0;
+        if (i % 4 === 0) s.style.background = "linear-gradient(90deg, transparent, rgba(61,220,151,.9))";
+        streaks.append(s);
+      }
+      // the tunnel leans a little toward the pointer
+      const tunnel = document.getElementById("tunnel");
+      addEventListener("pointermove", (e) => {
+        const x = (e.clientX / innerWidth - 0.5) * -28, y = (e.clientY / innerHeight - 0.5) * -28;
+        tunnel.style.transform = `translate(${x}px, ${y}px)`;
+      }, { passive: true });
     }
-    function draw(t) {
-      ctx.clearRect(0, 0, W, H);
-      const cut = W / 2;
-      T.forEach((th, i) => {
-        ctx.beginPath();
-        for (let x = 0; x <= W; x += 14) {
-          // the middle thread is broken
-          const gap = i === (T.length >> 1) && Math.abs(x - cut) < 90;
-          const y = th.y + th.a * Math.sin(x * th.f + t * .0005 * th.s + th.p) + (gap ? (x < cut ? 1 : -1) * Math.pow(1 - Math.abs(x - cut) / 90, 2) * 30 : 0);
-          x === 0 || (gap && Math.abs(x - cut) < 14) ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = i === (T.length >> 1) ? "rgba(61,220,151,.55)" : "rgba(236,231,222,.06)";
-        ctx.stroke();
-      });
-      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) requestAnimationFrame(draw);
-    }
-    size(); addEventListener("resize", size); requestAnimationFrame(draw);
   </script>
 </body>
 </html>
